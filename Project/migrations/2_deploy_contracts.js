@@ -1,5 +1,5 @@
 var Survey = artifacts.require("Survey");
 
 module.exports = function(deployer) {
-  deployer.deploy(Survey);
+  deployer.deploy(Survey, "123", "123", 3);
 };
