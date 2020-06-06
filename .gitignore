@@ -10,5 +10,5 @@
 *un~
 .DS_Store
 */**/.DS_Store
-./*/build
+*/build/
 ./*/migrations/.Rhistory
