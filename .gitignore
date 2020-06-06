@@ -12,3 +12,7 @@
 */**/.DS_Store
 */build/
 ./*/migrations/.Rhistory
+
+
+node_modules
+package-lock.json

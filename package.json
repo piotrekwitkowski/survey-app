@@ -1,0 +1,14 @@
+{
+  "name": "blkchn-survey-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "author": "Group Bubble",
+  "license": "ISC",
+  "dependencies": {
+    "lite-server": "^2.5.4"
+  }
+}
