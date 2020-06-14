@@ -6,10 +6,12 @@ contract Survey {
     string public _surveyname;
     string private _surveyURL = "123";
     uint private _amountparticipants;
+    uint private _actual_participants = 0;
     enum State { Created, Open, Ended }
     State public state;
-    string[] survey_questionnair;
-    string[][] survey_storage;
+    string[] public survey_questionnair;
+    string[][] private survey_storage;
+    uint private _amountquestions; 
 
     constructor(string memory name, string memory URL, uint participants) public{
         _owner = msg.sender;
@@ -38,21 +40,39 @@ function get_URL() public view returns (string memory) {
         _amountparticipants = new_participantnumber;
     }
     
-     function PrepareSurvey(string[] memory questions ) public _editor returns(string[] memory)  {
+     function PrepareSurvey(string[] memory questions, uint amountquestions ) public _editor returns(string[] memory)  {
         require(state == State.Created);
-                for (uint i = 0; i < _amountparticipants; i++) {
+        _amountquestions = amountquestions-1;
+                for (uint i = 0; i < _amountquestions; i++) {
                          survey_questionnair[i] = questions[i];
                 }
                 return survey_questionnair;
         }
 
-   function InitSurvey(uint _amountquestions) public _editor returns(string[][] memory) {
+   function InitSurvey() public _editor returns(string[][] memory) {
         require (state == State.Created);
         state = State.Open;
         survey_storage[_amountparticipants][_amountquestions];
         return survey_storage;
 
         }
-
+    function participate(string[] memory answers) public {
+        require (state == State.Open && (_actual_participants < _amountparticipants) && (msg.sender != _owner));
+        for (uint i = 0; i <= _amountquestions; i++ ) {
+           survey_storage[_actual_participants][i] =  answers[i];
+        }
+        _actual_participants ++; 
+        if (_actual_participants == _amountparticipants) {
+            state = State.Ended; 
+        }
+    }
+    
+    function retrieve_results () public view _editor returns(string[][] memory) {
+        require (state == State.Ended);
+        return survey_storage;
+    }
 
 }
+
+
+
