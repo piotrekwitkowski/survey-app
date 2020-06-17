@@ -7,7 +7,7 @@ contract Survey {
     string private _surveyURL = "123";
     uint256 private _amountparticipants;
     uint256 private _actual_participants = 0;
-    enum State {Created, Open, Ended}
+    enum State {CREATED, OPEN, ENDED}
     State public state;
     string[] public survey_questionnair;
     string[][] private survey_storage;
@@ -22,7 +22,7 @@ contract Survey {
         _surveyname = name;
         _surveyURL = URL;
         _amountparticipants = participants;
-        state = State.Created;
+        state = State.CREATED;
     }
 
     function get_URL() public view returns (string memory) {
@@ -34,7 +34,7 @@ contract Survey {
     }
 
     modifier _editor {
-        require(msg.sender == _owner);
+        require(msg.sender == _owner, "Sender is not the owner");
         _;
         // can add other contracts that need to do something
     }
@@ -43,7 +43,7 @@ contract Survey {
         public
         _editor
     {
-        require(state == State.Created);
+        require(state == State.CREATED, "State is not CREATED");
         _amountparticipants = new_participantnumber;
     }
 
@@ -52,7 +52,7 @@ contract Survey {
         _editor
         returns (string[] memory)
     {
-        require(state == State.Created);
+        require(state == State.CREATED, "State is not CREATED");
         _amountquestions = amountquestions - 1;
         for (uint256 i = 0; i < _amountquestions; i++) {
             survey_questionnair[i] = questions[i];
@@ -61,24 +61,26 @@ contract Survey {
     }
 
     function InitSurvey() public _editor returns (string[][] memory) {
-        require(state == State.Created);
-        state = State.Open;
+        require(state == State.CREATED, "State is not CREATED");
+        state = State.OPEN;
         survey_storage[_amountparticipants][_amountquestions];
         return survey_storage;
     }
 
     function participate(string[] memory answers) public {
+        require(state == State.OPEN, "State is not OPEN");
+        require(msg.sender != _owner, "Sender is not the owner");
         require(
-            state == State.Open &&
-                (_actual_participants < _amountparticipants) &&
-                (msg.sender != _owner)
+            _actual_participants < _amountparticipants,
+            "too many participants"
         );
+
         for (uint256 i = 0; i <= _amountquestions; i++) {
             survey_storage[_actual_participants][i] = answers[i];
         }
         _actual_participants++;
         if (_actual_participants == _amountparticipants) {
-            state = State.Ended;
+            state = State.ENDED;
         }
     }
 
@@ -88,7 +90,7 @@ contract Survey {
         _editor
         returns (string[][] memory)
     {
-        require(state == State.Ended);
+        require(state == State.ENDED, "State is not ENDED");
         return survey_storage;
     }
 }
