@@ -12,7 +12,7 @@ contract Survey {
     State public state;
     string[] public survey_questionnair;
     string[][] private survey_storage;
-    uint256 private _amountquestions;
+    uint256 private _amountquestions = 0;
 
     constructor(
         string memory name,
@@ -47,20 +47,32 @@ contract Survey {
         _amountparticipants = new_participantnumber;
     }
 
-    function PrepareSurvey(string[] memory questions, uint256 amountquestions)
+    function set_amountquestions(uint256 amount) public
+    {
+        require(state == State.CREATED, "State is not CREATED");
+        _amountquestions = amount;
+    } 
+    
+    function get_amountquestions() 
+    public
+    returns(uint amount) 
+    {
+        return _amountquestions;
+    }
+
+    function PrepareSurvey(string[] memory questions)
         public
-        _editor
         returns (string[] memory)
     {
         require(state == State.CREATED, "State is not CREATED");
-        _amountquestions = amountquestions - 1;
+        _amountquestions = questions.length - 1;
         for (uint256 i = 0; i < _amountquestions; i++) {
             survey_questionnair[i] = questions[i];
         }
         return survey_questionnair;
     }
 
-    function InitSurvey() public _editor returns (string[][] memory) {
+    function InitSurvey() public  returns (string[][] memory) {
         require(state == State.CREATED, "State is not CREATED");
         state = State.OPEN;
         survey_storage[_amountparticipants][_amountquestions];
@@ -87,7 +99,6 @@ contract Survey {
     function retrieve_results()
         public
         view
-        _editor
         returns (string[][] memory)
     {
         require(state == State.ENDED, "State is not ENDED");

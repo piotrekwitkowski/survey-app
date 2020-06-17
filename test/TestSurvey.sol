@@ -22,4 +22,21 @@ contract Testsurvey {
         string memory URL_gotten = survey.get_URL();
         Assert.equal("SurveyURL", URL_gotten, "Should match.");
     }
+
+    // Testing set_amount_questions 
+   // function test_set_amount_qu() public {
+     //   uint am = 3;
+       // survey.set_amount_questions(am);
+        //uint am2 = surey.get_amountparticipants();
+       // Assert.equal(am, am2, "Should match");
+    //}
+
+    // Testing preparing Survey
+    function test_prepare_survey() public {
+        string[3]memory questions = ["How old are you?","Whats your name?","Gender?"];
+        string[] memory questionnair = survey.PrepareSurvey(questions);
+        for( uint i = 0; i < questions.length; i++) {
+            Assert.equal(questions[i], questionnair[i], "Should match");
+        }
+    }
 }
