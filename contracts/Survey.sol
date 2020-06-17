@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 contract Survey {
     address public _owner;
     string public _surveyname;
-    string private _surveyURL = "123";
+    string private _surveyURL;
     uint256 private _amountparticipants;
     uint256 private _actual_participants = 0;
     enum State {CREATED, OPEN, ENDED}
