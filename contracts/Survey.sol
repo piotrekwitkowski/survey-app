@@ -41,7 +41,6 @@ contract Survey {
 
     function set_amountparticipants(uint256 new_participantnumber)
         public
-        _editor
     {
         require(state == State.CREATED, "State is not CREATED");
         _amountparticipants = new_participantnumber;

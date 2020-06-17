@@ -20,6 +20,6 @@ contract Testsurvey {
     // Testing the get_URL function
     function test_owner_gets_URL() public {
         string memory URL_gotten = survey.get_URL();
-        Assert.equal("123", URL_gotten, "Should match.");
+        Assert.equal("SurveyURL", URL_gotten, "Should match.");
     }
 }
