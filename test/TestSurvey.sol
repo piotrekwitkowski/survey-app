@@ -1,4 +1,5 @@
 pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
 
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
@@ -8,7 +9,7 @@ contract Testsurvey {
     // The address of the adoption contract to be tested
     Survey survey = Survey(DeployedAddresses.Survey());
 
-    uint256 test_amount = 9;
+    uint256 test_amount = 3;
 
     // Testing function set_amount_participants
     function test_set_amount_pat() public {
@@ -34,7 +35,7 @@ contract Testsurvey {
     // Testing preparing Survey
     function test_prepare_survey() public {
         string[3]memory questions = ["How old are you?","Whats your name?","Gender?"];
-        string[] memory questionnair = survey.PrepareSurvey(questions);
+        string[3] memory questionnair = survey.PrepareSurvey(questions);
         for( uint i = 0; i < questions.length; i++) {
             Assert.equal(questions[i], questionnair[i], "Should match");
         }
