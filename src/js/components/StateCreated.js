@@ -4,6 +4,10 @@ class StateCreatedElement extends LitElement {
 
   static get properties() {
     return {
+      surveyInstance: { type: Object },
+      participants: { type: Number },
+      // questions will actually contain only empty strings, because lit-element uses one-way data binding.
+      // the questions must be copied from textfields on submit (on initSurvey())
       questions: { type: Array },
     }
   }
@@ -11,6 +15,7 @@ class StateCreatedElement extends LitElement {
   constructor() {
     super();
     this.questions = [''];
+    this.participants = 1;
   }
 
   addQuestion() {
@@ -18,8 +23,8 @@ class StateCreatedElement extends LitElement {
     this.requestUpdate();
   }
 
-  removeQuestion(q) {
-    const index = this.questions.indexOf(q);
+  removeQuestion(question) {
+    const index = this.questions.indexOf(question);
     if (index > -1) {
       this.questions.splice(index, 1);
       this.requestUpdate();
@@ -27,44 +32,38 @@ class StateCreatedElement extends LitElement {
   }
 
   initSurvey() {
-    console.log('initSurvey');
-    
+    console.log('initSurvey', this.surveyInstance);
+    const questions = this.getQuestions();
+    this.surveyInstance.init(questions, this.participants)
+  }
+
+  getQuestions() {
+    const questionInputs = document.querySelectorAll(".questionInput");
+    return Array.from(questionInputs).map(input => input.value);
   }
 
   render() {
     return html`
       <h2>Time to create the survey!</h2>
 
-      <div class="mb-2">
-
-        <form class="form-inline mb-2">
-          <div class="form-group">
-          <label for="inputState" class="mr-2">How many participants?</label>
-            <select id="inputState" class="form-control mr-2">
-              <option selected>1</option>
-              <option>2</option>
-              <option>3</option>
-            </select>
-          </div>
-          <button type="button" class="btn btn-secondary mr-2" @click=${() => this.initSurvey()}>Init the survey</button>
-          <button type="button" class="btn btn-success" @click=${() => this.addQuestion()}>Add more questions</button>
-        </form>
-      </div>
-
-      <div class="form-group my-2">
-      </div>
-
+      <form class="form-inline">
+        <label class="flex-fill mr-2">How many participants?</label>
+        <input type="number" class="flex-fill form-control m-2" value=${this.participants}>
+        <button type="button" class="btn btn-secondary m-2" @click=${() => this.initSurvey()}>Init the survey</button>
+        <button type="button" class="btn btn-success m-2" @click=${() => this.addQuestion()}>Add questions</button>
+      </form>
+      
       ${this.questions.map(q => html`
-        <form class="">
-          <div class="form-group">              
-            <label class="mr-2">Question:</label>
-            <input type="text" class="form-control" placeholder="Please specify the question">
+        <div class="form-group">              
+          <label class="mr-2">Question:</label>
+          <div class="d-flex">
+            <input type="text" class="form-control mr-2 questionInput" placeholder="Please specify the question">
+            <!-- <input type="text" class="form-control mr-2" @input=${event => this.editQuestion(event, q)} placeholder="Please specify the question"> -->
             <button type="button" class="btn btn-danger" @click=${() => this.removeQuestion(q)}>Remove question</button>
-          </div>      
-        </form>
+          </div>
+        </div>      
       `)}
-          
-
+      
     `;
   }
 

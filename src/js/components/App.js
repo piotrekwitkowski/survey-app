@@ -36,7 +36,7 @@ class AppElement extends LitElement {
         <div class="row">
           <div class="col">
             <p>surveyInstance is ${this.surveyInstance ? 'present' : 'not present'}, surveyState is ${this.surveyState ? this.surveyState : 'not present'}</p>
-            ${this.surveyState == 0 ? html`<x-state-created ./>` : ''}
+            ${this.surveyState == 0 ? html`<x-state-created .surveyInstance=${this.surveyInstance}></x-state-created>` : ''}
             ${this.surveyState == 1 ? html`<x-state-open/>` : ''}
             ${this.surveyState == 2 ? html`<x-state-ended/>` : ''}
           </div>
