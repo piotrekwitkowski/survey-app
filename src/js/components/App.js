@@ -46,26 +46,3 @@ class AppElement extends LitElement {
   }
 }
 customElements.define('x-app', AppElement);
-
-
-
-
-{/* <div class="container-fluid">
-
-<div id="questionsRow">
-  <!-- PETS LOAD HERE -->
-</div>
-<button class="btn btn-default btn-submit" type="button">Submit</button>
-</div>
-
-<div id="questionTemplate" style="display: none;">
-<div class="row">
-  <div class="col-md-6">
-    <div class="form-group">
-      <label>Question</label>
-      <input type="text" class="form-control" placeholder="Please fill in your answer">
-    </div>
-  </div>
-</div>
-</div> */}
-
