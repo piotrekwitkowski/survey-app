@@ -15,7 +15,7 @@ contract Survey {
     string public url;
     State public state;
 
-    constructor() internal {
+    constructor() public {
         _owner = msg.sender;
         state = State.CREATED;
     }
