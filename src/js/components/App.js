@@ -19,36 +19,27 @@ class AppElement extends LitElement {
   }
 
   updated(changedProperties) {
-    const instanceChanged = changedProperties.has('surveyInstance');
-    if (instanceChanged) {
+    if (changedProperties.has('surveyInstance')) {
       console.log('surveyInstance', this.surveyInstance);
-        this.surveyInstance.state().then(state => {
-          console.log('state', state);
-          this.surveyState = state.c;
-        })
-
+      this.surveyInstance.state().then(state => {
+        console.log('state', state);
+        this.surveyState = state.c;
+      })
     }
-    // console.log('changedProperties:', changedProperties.has('surveyInstance'));
-    // super.connectedCallback();
-
-    // if (this.surveyInstance) {
-    // }
   }
 
   render() {
     console.log('render');
 
-      return html`
+    return html`
       <div class="container">
         <div class="row">
-          <p>surveyInstance is ${this.surveyInstance ? 'present' : 'not present'}</p>
-          <p>surveyState is ${this.surveyState ? this.surveyState : 'not present'}</p>
-          ${this.surveyState == 0 ? html`<p>State is 0</p>` : ''}
-          ${this.surveyState == 0 ? html`<x-state-created/>` : ''}
-          ${this.surveyState == 1 ? html`<p>State is 1</p>` : ''}
-          ${this.surveyState == 1 ? html`<x-state-open/>` : ''}
-          ${this.surveyState == 2 ? html`<p>State is 2</p>` : ''}
-          ${this.surveyState == 2 ? html`<x-state-ended/>` : ''}
+          <div class="col">
+            <p>surveyInstance is ${this.surveyInstance ? 'present' : 'not present'}, surveyState is ${this.surveyState ? this.surveyState : 'not present'}</p>
+            ${this.surveyState == 0 ? html`<x-state-created ./>` : ''}
+            ${this.surveyState == 1 ? html`<x-state-open/>` : ''}
+            ${this.surveyState == 2 ? html`<x-state-ended/>` : ''}
+          </div>
         </div>
       </div>
     `;

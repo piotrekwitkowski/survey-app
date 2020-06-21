@@ -30,12 +30,13 @@ contract Survey {
         _;
     }
 
-    function init(string[] memory questions)
+    function init(string[] memory questions, uint maxParticipants)
         public
         onlyOwner
         requireStateCreated
     {
         _questions = questions;
+        _maxParticipants = maxParticipants;
         state = State.OPEN;
     }
 
