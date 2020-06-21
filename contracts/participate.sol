@@ -2,11 +2,20 @@ pragma solidity >=0.5.0;
 
 contract participate {
     bytes32 public_key;
+    bytes32 contract_pub_key;
     // todo: how to store deposit in conract
     // store depoit deposit;
     string static_token = "I love surveys";
 
-    constructor(byte32 memory public_key){
+    /*
+    To be called by the survey
+    param public_key: user public key
+    param contract_pub_key: public key of the calling contract
+    */
+    constructor(byte32 memory public_key, bytes32 contract_pub_key){
+        //stores the contract key for authentication
+        set_contract_key(contract_pub_key);
+        
         // store users depositie
         if (store_deposit(/*deposit?*/)) {
             // store users pub key
@@ -75,6 +84,16 @@ contract participate {
             return true
         } else {
             return false
+        }
+    }
+
+
+    /*
+    If the survey is completed it calls the participation contract to release the participants deposite
+    */
+    function release_deposit(string token) {
+        if(static_token == decode(contract_pub_key, token)){
+            // release deposite to user
         }
     }
 }
