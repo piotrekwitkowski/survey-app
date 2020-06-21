@@ -99,7 +99,7 @@ contract Survey {
         return survey_storage;
     }
 
-    function retrieve_results() public returns (string[3][3] memory) {
+    function retrieve_results() public view returns (string[3][3] memory) {
         require(state == State.ENDED, "State is not ENDED");
         return survey_storage;
     }
