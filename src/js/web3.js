@@ -9,7 +9,7 @@ export const getWeb3 = async () => {
       await window.ethereum.enable();
     } catch (error) {
       // User denied account access...
-      console.error("User denied account access")
+      console.error("User denied account access");
     }
   }
   // Legacy dapp browsers...

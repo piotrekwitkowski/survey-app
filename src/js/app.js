@@ -41,7 +41,7 @@ App = {
   },
 
   initContract: function () {
-    console.log('initContract')
+    console.log('initContract');
     $.getJSON('Survey.json', function (data) {
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
       var SurveyArtifact = data;
