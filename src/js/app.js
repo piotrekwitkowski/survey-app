@@ -9,11 +9,6 @@ App = {
 
       for (i = 0; i < data.length; i++) {
         questionTemplate.find('label').text(data[i].question);
-        // questionTemplate.find('.pet-breed').text(data[i].breed);
-        // questionTemplate.find('.pet-age').text(data[i].age);
-        // questionTemplate.find('.pet-location').text(data[i].location);
-        // questionTemplate.find('.btn-adopt').attr('data-id', data[i].id);
-
         questionsRow.append(questionTemplate.html());
       }
     });
@@ -69,7 +64,7 @@ App = {
   readState: () => {
     App.contracts.Survey.deployed().then(instance => {
       console.log('instance', instance)
-      const state = instance.getState().then(state => {
+      const state = instance.state().then(state => {
         console.log('state:', state)
       });
     })
