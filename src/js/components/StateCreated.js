@@ -33,8 +33,24 @@ class StateCreatedElement extends LitElement {
 
   initSurvey() {
     console.log('initSurvey', this.surveyInstance);
+    const instance = this.surveyInstance;
     const questions = this.getQuestions();
-    this.surveyInstance.init(questions, this.participants)
+    const participants = this.participants;
+
+    // const getData = instance.init.getData();
+    // console.log('getData', getData)
+
+    let account;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }    
+      console.log('accounts[0]', accounts[0])
+      account = accounts[0];
+
+      console.log('calling surveyInstance.init with:', questions, participants, {from: account}); 
+      instance.init.sendTransaction(questions, participants, account, {from: account});
+    });
   }
 
   getQuestions() {

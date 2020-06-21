@@ -6,7 +6,7 @@ contract Survey {
     enum State {CREATED, OPEN, ENDED}
 
     address private _owner;
-    string[] private _questions;
+    bytes[] private _questions;
     bytes[] private _answers;
     uint256 private _participants;
     uint256 private _maxParticipants;
@@ -30,14 +30,14 @@ contract Survey {
         _;
     }
 
-    function init(string[] memory questions, uint maxParticipants)
+    function init(bytes[] memory questions, uint maxParticipants)
         public
         onlyOwner
-        requireStateCreated
+        // requireStateCreated
     {
         _questions = questions;
         _maxParticipants = maxParticipants;
-        state = State.OPEN;
+        // state = State.OPEN;
     }
 
     // function participate(string[3] memory answers)
