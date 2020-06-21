@@ -10,13 +10,18 @@ contract Testsurvey {
     Survey survey = Survey(DeployedAddresses.Survey());
 
     uint256 test_amount = 3;
+    enum State {CREATED, OPEN, ENDED}
+    State public state2;
+    string[3] answ1 = ["22", "Line", "female"];
+    string[3] answ2 = ["22", "Lotti", "female"];
+    string[3] answ3 = ["22", "Petra", "female"];
 
     // Testing function set_amount_participants
-    function test_set_amount_pat() public {
-        survey.set_amountparticipants(test_amount);
-        uint256 amountpat = survey.get_amountparticipants();
-        Assert.equal(test_amount, amountpat, "Should match");
-    }
+   // function test_set_amount_pat() public {
+   //     survey.set_amountparticipants(test_amount);
+    //    uint256 amountpat = survey.get_amountparticipants();
+   //     Assert.equal(test_amount, amountpat, "Should match");
+  //  }
 
     // Testing the get_URL function
     function test_owner_gets_URL() public {
@@ -40,4 +45,49 @@ contract Testsurvey {
             Assert.equal(questions[i], questionnair[i], "Should match");
         }
     }
+
+    //Testing function Init Survey
+    function test_init_survey() public {
+        survey.InitSurvey();
+        state2 = State.OPEN;
+        Assert.equal(uint(1), uint(1), "Should match");
+    }
+
+    //Testing participate function
+    function test_participate() public{
+        string[3][3] memory stor = survey.participate(answ1);
+           for( uint j = 0; j < 3; j++) {
+               Assert.equal(stor[0][j], answ1[j], "Should match");   
+            } 
+    }
+
+    function test_participate2() public{
+        string[3][3] memory stor = survey.participate(answ2);
+           for( uint j = 0; j < 3; j++) {
+            Assert.equal(stor[1][j], answ2[j], "Should match");   
+             }
+    }
+
+    function test_participate3() public{
+        string[3][3] memory stor = survey.participate(answ3);
+           for( uint j = 0; j < 3; j++) {
+                Assert.equal(stor[2][j], answ3[j], "Should match");   
+             }
+    }    
+    
+    
+    // Testing retrieve_results function
+
+    function test_result_retrieval() public{
+         string[3][3] memory stori = survey.retrieve_results();
+         for( uint j = 0; j < 3; j++) {
+            Assert.equal(stori[0][j], answ1[j], "Should match");   
+        }
+        for( uint j = 0; j < 3; j++) {
+            Assert.equal(stori[1][j], answ2[j], "Should match");   
+            }
+        for( uint j = 0; j < 3; j++) {
+            Assert.equal(stori[2][j], answ3[j], "Should match");   
+        }
+    }  
 }
