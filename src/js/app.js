@@ -36,9 +36,8 @@ App = {
     // Legacy dapp browsers...
     else if (window.web3) {
       App.web3Provider = window.web3.currentProvider;
-    }
-    // If no injected web3 instance is detected, fall back to Ganache
-    else {
+    } else {
+      // If no injected web3 instance is detected, fall back to Ganache
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
     }
     web3 = new Web3(App.web3Provider);
@@ -57,7 +56,7 @@ App = {
       App.contracts.Survey.setProvider(App.web3Provider);
 
       // Use our contract to retrieve and mark the adopted pets
-      // return App.markAdopted();
+      return App.readState();
     });
 
     return App.bindEvents();
@@ -67,12 +66,21 @@ App = {
     $(document).on('click', '.btn-submit', App.handleSubmit);
   },
 
-  // markAdopted: function (adopters, account) {
-  //   var surveyInstance;
+  readState: () => {
+    App.contracts.Survey.deployed().then(instance => {
+      console.log('instance', instance)
+      const state = instance.getState().then(state => {
+        console.log('state:', state)
+      });
+    })
+  },
 
-  //   App.contracts.Survey.deployed().then(function (instance) {
-  //     console.log('instance', instance)
-  //     surveyInstance = instance;
+  // markAdopted: function (adopters, account) {
+    //   var surveyInstance;
+
+    //   App.contracts.Survey.deployed().then(function (instance) {
+    //     console.log('instance', instance)
+    //     surveyInstance = instance;
 
   //     return surveyInstance.getAdopters.call();
   //   }).then(function (adopters) {
@@ -98,12 +106,12 @@ App = {
   //     if (error) {
   //       console.log(error);
   //     }
-    
+
   //     var account = accounts[0];
-    
+
   //     App.contracts.Adoption.deployed().then(function(instance) {
   //       adoptionInstance = instance;
-    
+
   //       // Execute adopt as a transaction by sending account
   //       return adoptionInstance.adopt(petId, {from: account});
   //     }).then(function(result) {

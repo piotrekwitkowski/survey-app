@@ -26,6 +26,10 @@ contract Survey {
         state = State.CREATED;
     }
 
+    function getState() public view returns (State) {
+        return state;
+    }
+
     function get_URL() public view returns (string memory) {
         return _surveyURL;
     }
@@ -102,9 +106,5 @@ contract Survey {
     function retrieve_results() public returns (string[3][3] memory) {
         require(state == State.ENDED, "State is not ENDED");
         return survey_storage;
-    }
-
-    function getState() public view returns (State) {
-        return state;
     }
 }
