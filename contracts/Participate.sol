@@ -1,9 +1,8 @@
-
 pragma solidity >=0.5.0;
 
 contract participate {
-    bytes32 public_key;
-    bytes32 contract_pub_key;
+    string public_key;
+    string contract_pub_key;
     // todo: how to store deposit in conract
     // store depoit deposit;
     string static_token = "I love surveys";
@@ -13,14 +12,16 @@ contract participate {
     param public_key: user public key
     param contract_pub_key: public key of the calling contract
     */
-    constructor(byte32 memory public_key, bytes32 contract_pub_key){
+    constructor(string memory public_key, string memory contract_key) public{
         //stores the contract key for authentication
-        set_contract_key(contract_pub_key);
+	// set_contract_key(contract_pub_key);
+        contract_pub_key = contract_key;
+	
         
         // store users depositie
         if (store_deposit(/*deposit?*/)) {
             // store users pub key
-            setPubKey(user_pub_key);
+            setPubKey(public_key);
             
             // pass user 
             survey_user();
@@ -30,19 +31,19 @@ contract participate {
     /*
     Function to store deposit in contract
     */
-    private function store_deposit() {
+    function store_deposit() private returns(bool){
         // todo: store deposit
-        if(/*success*/) {
-            return true
+        if(1==1/*success*/) {
+            return true;
         } else {
-            return false
+            return false;
         }
     }
 
     /* 
     Setter for the users public key
     */
-    private function setPubKey(bytes32 user_pub_key) {
+    function setPubKey(string memory user_pub_key) private{
         public_key = user_pub_key;
     }
 
@@ -53,8 +54,8 @@ contract participate {
     param public_key: users public_key
     param token: the private key encoded static token
     */
-    private function decote(bytes32 public_key, string token) {
-        string decoded_token = '';
+    function decode(string memory pub_key, string memory token) private returns (string memory) {
+        string memory decoded_token = '';
         // todo: decode token with public key
         // return 
         return decoded_token;
@@ -63,7 +64,7 @@ contract participate {
     /* 
     Pass user public key to survey for participation
     */
-    private function survey_user() {
+    function survey_user() private {
         // todo: register user with survey by passing public key
         // the pub key can be used later on for verification:
         // surveyKey(userKey(respone))) => user signed, contract encoded 
@@ -72,19 +73,19 @@ contract participate {
     /* 
     Getter for the users public key
     */
-    function getPubKey() constant returns (bytes32) {
-        return pubKey;
+    function getPubKey() public view returns (string memory) {
+        return public_key;
     }
 
     /*
     param: private key encoded static token
     return: boolean if priv key belongs to pub key
     */
-    function verify_user_participation(string token) {
-        if(static_token == decode(public_key, token)){
-            return true
+    function verify_user_participation(string memory token) public returns(bool) {
+        if(compare(static_token,decode(public_key, token))){
+            return true;
         } else {
-            return false
+            return false;
         }
     }
 
@@ -92,9 +93,30 @@ contract participate {
     /*
     If the survey is completed it calls the participation contract to release the participants deposite
     */
-    function release_deposit(string token) {
-        if(static_token == decode(contract_pub_key, token)){
+    function release_deposit(string memory token) public {
+        if(compare(static_token,decode(public_key, token))){
             // release deposite to user
         }
     }
+
+        function compare(string memory _a, string memory _b) public returns (bool) {
+        bytes memory a = bytes(_a);
+        bytes memory b = bytes(_b);
+        uint minLength = a.length;
+        if (b.length < minLength) minLength = b.length;
+        //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
+        for (uint i = 0; i < minLength; i ++)
+            if (a[i] < b[i])
+                return false;
+            else if (a[i] > b[i])
+                return false;
+        if (a.length < b.length)
+            return false;
+        else if (a.length > b.length)
+            return false;
+        else
+            return true;
+    }
 }
+
+   
