@@ -22,5 +22,5 @@ getWeb3().then(web3 => {
 });
 
 const render = surveyContractInstance => {
-  import('./components/App.js').then(m => m.init(surveyContractInstance));
+  import('./components/App.js').then(m => m.init(web3, surveyContractInstance));
 }

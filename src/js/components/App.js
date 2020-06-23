@@ -3,8 +3,9 @@ import { LitElement, html, css } from 'https://unpkg.com/lit-element/lit-element
 
 import './StateCreated.js'
 
-export const init = surveyInstance => {
+export const init = (web3, surveyInstance) => {
   const appNode = document.querySelector("x-app");
+  appNode.web3 = web3;
   appNode.surveyInstance = surveyInstance;
 }
 
@@ -13,6 +14,7 @@ class AppElement extends LitElement {
 
   static get properties() {
     return {
+      web3: { type: Object },
       surveyInstance: { type: Object },
       surveyState: { type: Object }
     }
@@ -30,13 +32,14 @@ class AppElement extends LitElement {
 
   render() {
     console.log('render');
+    console.log('this.web3', this.web3);
 
     return html`
       <div class="container">
         <div class="row">
           <div class="col">
             <p>surveyInstance is ${this.surveyInstance ? 'present' : 'not present'}, surveyState is ${this.surveyState ? this.surveyState : 'not present'}</p>
-            ${this.surveyState == 0 ? html`<x-state-created .surveyInstance=${this.surveyInstance}></x-state-created>` : ''}
+            ${this.surveyState == 0 ? html`<x-state-created .surveyInstance=${this.surveyInstance} .web3=${this.web3}></x-state-created>` : ''}
             ${this.surveyState == 1 ? html`<x-state-open/>` : ''}
             ${this.surveyState == 2 ? html`<x-state-ended/>` : ''}
           </div>

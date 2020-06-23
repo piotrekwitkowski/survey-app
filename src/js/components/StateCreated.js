@@ -4,6 +4,7 @@ class StateCreatedElement extends LitElement {
 
   static get properties() {
     return {
+      web3: { type: Object },
       surveyInstance: { type: Object },
       participants: { type: Number },
       // questions will actually contain only empty strings, because lit-element uses one-way data binding.
@@ -16,6 +17,7 @@ class StateCreatedElement extends LitElement {
     super();
     this.questions = [''];
     this.participants = 1;
+    console.log(this.web3)
   }
 
   addQuestion() {
@@ -35,10 +37,13 @@ class StateCreatedElement extends LitElement {
     console.log('initSurvey', this.surveyInstance);
     const instance = this.surveyInstance;
     const questions = this.getQuestions();
+    // const questionsBytes = questions.map(q=> web3.utils.utf8ToHex(q));
     const participants = this.participants;
 
     // const getData = instance.init.getData();
     // console.log('getData', getData)
+
+    console.log('aaaa', web3)
 
     let account;
     web3.eth.getAccounts(function(error, accounts) {
@@ -49,7 +54,7 @@ class StateCreatedElement extends LitElement {
       account = accounts[0];
 
       console.log('calling surveyInstance.init with:', questions, participants, {from: account}); 
-      instance.init.sendTransaction(questions, participants, account, {from: account});
+      instance.init(questions, participants, {from: account});
     });
   }
 
