@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.5.0;
 pragma experimental ABIEncoderV2;
-import "./Participate.sol";
+//import "./Participate.sol";
 
 contract Survey {
     enum State {CREATED, OPEN, ENDED}
@@ -9,8 +9,8 @@ contract Survey {
     string[] private _questions;
     string[][] private _answers;
     uint256 private _participants;
-    uint256 private _maxParticipants = 3;
-    Participate[] participantsList;
+    uint256 public _maxParticipants = 3;
+    address[] private participantsList;
 
     string public name;
     State public state;
@@ -50,23 +50,25 @@ contract Survey {
     function participate(
         // address public_key,
         // address participantAddress,
-        address contract_key,
-        string[] memory answers
+        string[] memory answers,
+        address caller
     ) public requireStateOpen {
-        Participate participant = new Participate(contract_key);
-        if (participant.store_deposit()) {
-            participantsList.push(participant);
+        //Participate participant = new Participate(this, caller);
+            participantsList.push(caller);
             _answers[_participants] = answers;
             _participants++;
 
             if (_participants == _maxParticipants) {
                 state = State.ENDED;
             }
-        }
     }
 
     function getAnswers() public view returns (string[][] memory) {
         require(state == State.ENDED, "State is not ENDED");
         return _answers;
+    }
+
+    function getParticipantList() public view returns (address[] memory ) {
+        return participantsList;
     }
 }

@@ -4,30 +4,52 @@ pragma experimental ABIEncoderV2;
 import "./Survey.sol";
 
 contract Master {
+    enum State {CREATED, OPEN, ENDED}
     Survey[] public surveys;
+    uint constant deposit = 10;
+    uint constant payment = 4;
 
-    function createSurvey(string[] memory questions) public {
+    function createSurvey(string[] memory questions) public payable {
         // can be called by everyone who wants to start a new survey via frontend
         // erstellt eine Instanz von Survey
         address initiator = msg.sender;
-        Survey survey = new Survey(initiator); //heißt dann jede neue Survey gleich?
+        Survey survey = new Survey(initiator);
+        if (msg.value < survey._maxParticipants * payment) {
+            revert("Payment for participants is not sufficient");
+        } else {
         survey.init(questions);
         surveys.push(survey);
+        }
     }
 
-    function participateInSurvey(
-        address contract_key,
+    function participateInSurvey (
         string[] memory answers,
-        // address memory public_key,
         Survey survey
-    ) public {
-        // address caller = msg.sender;
-        // survey.participate(public_key, contract_key, answers, caller);
-        survey.participate(contract_key, answers);
+    ) public payable {
+         address caller = msg.sender;
+         // deposit hinterlegen
+        if (msg.value < deposit){
+            revert("Payment was lower than requested deposit"); 
+        } else
+        {
+            survey.participate(answers, caller);
+            if (survey.state == State.ENDED)  {
+                returnDeposit(survey.getParticipantList, survey);
+            }
+        } 
     }
 
     function getSurveyAnswers(Survey survey) public view returns (string[][] memory) {
         return survey.getAnswers();
+    }
+
+    function returnDeposit(address[] memory participantsList, Survey survey) private {
+        for (uint i = 0; i < survey._maxParticipants; i++) {
+            address participant = participantsList[i];
+            participant.send(deposit+payment);
+        }
+
+
     }
 
     // should be fired automatically!
