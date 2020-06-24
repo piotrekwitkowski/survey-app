@@ -6,18 +6,18 @@ import "./Participate.sol";
 contract Survey {
     enum State {CREATED, OPEN, ENDED}
     address private _owner;
-    bytes[] private _questions;
-    bytes[] private _answers;
-    bytes[][] private survey_storage;
-    uint256 private _participants = 0;
-    uint256 private _maxParticipants = 3; 
-    Participate[3] List_of_participants; 
+    string[] private _questions;
+    string[][] private _answers;
+    uint256 private _participants;
+    uint256 private _maxParticipants = 3;
+    Participate[] participantsList;
 
     string public name;
     State public state;
 
-    constructor() public {
-        _owner = msg.sender; // macht das noch Sinn wenn es immer Master ist der aufruft
+    constructor(address owner) public {
+        _owner = owner;
+        _participants = 0;
         state = State.CREATED;
     }
 
@@ -31,40 +31,42 @@ contract Survey {
         _;
     }
 
-    function init(bytes[] memory questions)
+    modifier requireStateOpen {
+        require(state == State.OPEN, "Current state must be OPEN");
+        _;
+    }
+
+    // function init(string[] memory questions, uint memory maxParticipants)
+    function init(string[] memory questions)
         public
-        onlyOwner
+        // onlyOwner
         requireStateCreated
     {
-        _questions = questions; 
+        _questions = questions;
+        // _maxParticipants = maxParticipants;
         state = State.OPEN;
     }
 
+    function participate(
+        // address public_key,
+        // address participantAddress,
+        address contract_key,
+        string[] memory answers
+    ) public requireStateOpen {
+        Participate participant = new Participate(contract_key);
+        if (participant.store_deposit()) {
+            participantsList.push(participant);
+            _answers[_participants] = answers;
+            _participants++;
 
+            if (_participants == _maxParticipants) {
+                state = State.ENDED;
+            }
+        }
+    }
 
-    function participate(string memory public_key, string memory contract_key, string[3] memory answers, address part) public
-        returns (string[3][3] memory) { 
-        require(
-             _participants <= _maxparticipants,
-             "too many participants"
-);
-         Participate this_participant = new Participate(public_key, contract_key); //speichern!!
-        if(this_participant.store_deposit()) {
-            Participant[_participants] = Participant(this_participant);
-
-         for (uint256 i = 0; i < 3; i++) {
-             survey_storage[_participants][i] = answers[i];
-         }
-         _participants++;
-         if (_participants == _maxparticipants) {
-             state = State.ENDED;
-         }
-        return survey_storage;
-         }
-     }
-
-     function retrieve_results() public view returns (string[3][3] memory) {
-         require(state == State.ENDED, "State is not ENDED");
-         return survey_storage;
-     }
+    function getAnswers() public view returns (string[][] memory) {
+        require(state == State.ENDED, "State is not ENDED");
+        return _answers;
+    }
 }

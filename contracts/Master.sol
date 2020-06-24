@@ -1,28 +1,37 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.5.0;
+pragma experimental ABIEncoderV2;
 import "./Survey.sol";
 
-contract Master{
-    uint number_surveys = 0;
-    Survey[] all_surveys;
-    function NewSurvey(bytes[] quest) public{
-        // can be called by everyone who wants to start a new survey via front end
+contract Master {
+    Survey[] public surveys;
+
+    function createSurvey(string[] memory questions) public {
+        // can be called by everyone who wants to start a new survey via frontend
         // erstellt eine Instanz von Survey
         address initiator = msg.sender;
-        Survey this_survey = new Survey(); //heißt dann jede neue Survey gleich?
-        this_survey.init(quest);
-        all_surveys[number_surveys] = this_survey;
-        number_surveys ++;
+        Survey survey = new Survey(initiator); //heißt dann jede neue Survey gleich?
+        survey.init(questions);
+        surveys.push(survey);
     }
 
-    function ParticipateInSurvey(string memory public_key, string memory contract_key, Survey survey,  string[3] memory answers ) public{
-        address caller = msg.sender;
-         survey.participate(public_key,contract_key, answers, caller);
-    }
-    function FinishSurvey(Survey survey) public {
-        //survey.release_deposits()
+    function participateInSurvey(
+        address contract_key,
+        string[] memory answers,
+        // address memory public_key,
+        Survey survey
+    ) public {
+        // address caller = msg.sender;
+        // survey.participate(public_key, contract_key, answers, caller);
+        survey.participate(contract_key, answers);
     }
 
-    function ResultSurvey(Survey survey) public{
-        //survey.retrieve_results()
+    function getSurveyAnswers(Survey survey) public view returns (string[][] memory) {
+        return survey.getAnswers();
     }
+
+    // should be fired automatically!
+    // function finishSurvey(Survey survey) public {
+    //     //survey.release_deposits()
+    // }
 }
