@@ -11,6 +11,7 @@ contract Survey {
     uint256 private _participants;
     uint256 public _maxParticipants = 3;
     address[] private participantsList;
+    bool public finish = false;
 
     string public name;
     State public state;
@@ -60,6 +61,7 @@ contract Survey {
 
             if (_participants == _maxParticipants) {
                 state = State.ENDED;
+                finish = true;
             }
     }
 
@@ -69,6 +71,7 @@ contract Survey {
     }
 
     function getParticipantList() public view returns (address[] memory ) {
-        return participantsList;
+        address[]memory List = participantsList;
+        return List;
     }
 }
