@@ -1,8 +1,8 @@
 pragma solidity >=0.5.0;
 
-contract participate {
+contract Participate {
     string public_key;
-    string contract_pub_key;
+    address contract_pub_key;
     // todo: how to store deposit in conract
     // store depoit deposit;
     string static_token = "I love surveys";
@@ -12,7 +12,7 @@ contract participate {
     param public_key: user public key
     param contract_pub_key: public key of the calling contract
     */
-    constructor(string memory public_key, string memory contract_key) public{
+    constructor(address contract_key) public{
         //stores the contract key for authentication
 	// set_contract_key(contract_pub_key);
         contract_pub_key = contract_key;
