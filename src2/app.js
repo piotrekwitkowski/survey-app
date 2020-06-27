@@ -62,7 +62,8 @@ class AppElement extends LitElement {
             ${this.surveys ? html`
               <p>this.surveys.length is ${this.surveys.length}</p>
               ${this.surveys.map(survey => html`<x-survey .survey=${survey}></x-survey>`)}
-            ` : html`No surveys`}
+            ` : html`<p>No surveys</p>`}
+
             <button type="button" class="btn btn-success" @click=${this.createSurvey}>Create test survey</button>
 
           </div>
