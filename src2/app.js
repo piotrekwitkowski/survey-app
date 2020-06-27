@@ -51,11 +51,11 @@ class AppElement extends LitElement {
       <div class="container">
         <div class="row">
           <div class="col">
-            <p>Master contract instance is ${this.masterInstance ? 'present' : 'not present'}</p>
+            <p>Master contract instance is ${this.masterInstance ? 'loaded' : 'not present'}</p>
             <button type="button" class="btn btn-secondary" @click=${this.reloadSurveys}>Reload surveys</button>
 
             ${this.surveys ? html`
-              <p>this.surveys.length is ${this.surveys.length}<p>
+              <p>this.surveys.length is ${this.surveys.length}</p>
               ${this.surveys.map(survey => html`<x-survey .survey=${survey}></x-survey>`)}
             ` : html`No surveys`}
           </div>
