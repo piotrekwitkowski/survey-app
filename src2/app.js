@@ -69,7 +69,7 @@ class AppElement extends LitElement {
 
             ${this.surveys ? html`
               <p>this.surveys.length is ${this.surveys.length}</p>
-              ${this.surveys.map(survey => html`<x-survey .survey=${survey}></x-survey>`)}
+              ${this.surveys.map(address => html`<x-survey .address=${address}></x-survey>`)}
             ` : html`<p>No surveys</p>`}
 
             <!-- <p>-----------------------------------</p>

@@ -50,6 +50,11 @@ contract Survey {
         state = State.OPEN;
     }
 
+    // function getInfo() public view onlyOwner returns (string[] memory) {
+    function getInfo() public view returns (string[] memory) {
+        return _questions;
+    }
+
     function participate(
         // address public_key,
         // address participantAddress,
