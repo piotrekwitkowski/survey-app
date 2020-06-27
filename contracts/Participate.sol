@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.5.0;
 
-/*contract Participate {
-    address user_Address;
-    address survey_Address;
-    bool permitted = false;
-     
+contract Participate {
+    string public_key;
+    address contract_pub_key;
     // todo: how to store deposit in conract
     // store depoit deposit;
     string static_token = "I love surveys";
@@ -15,18 +13,17 @@ pragma solidity >=0.5.0;
     param public_key: user public key
     param contract_pub_key: public key of the calling contract
     */
-    /*constructor(address contract_key, address user) public {
+    constructor(address contract_key) public {
         //stores the contract key for authentication
         // set_contract_key(contract_pub_key);
-        survey_Address = contract_key;
-        user_Address = user;
+        contract_pub_key = contract_key;
 
         // store users depositie
         if (
-            store_deposit() 
+            store_deposit() /*deposit?*/
         ) {
             // store users pub key
-            permitted = true; 
+            setPubKey(public_key);
 
             // pass user
             survey_user();
@@ -36,25 +33,21 @@ pragma solidity >=0.5.0;
     /*
     Function to store deposit in contract
     */
-    /*function store_deposit() public payable returns (bool) {
+    function store_deposit() public pure returns (bool) {
         // todo: store deposit
-        if (msg.value < deposit ){
-            revert();
-            return false; 
-        } else
-        {
+        if (
+            1 == 1 /*success*/
+        ) {
             return true;
+        } else {
+            return false;
         }
-
-
-        }    
-        
     }
 
     /*
     Setter for the users public key
     */
-    /*function setPubKey(string memory user_pub_key) private {
+    function setPubKey(string memory user_pub_key) private {
         public_key = user_pub_key;
     }
 
@@ -65,7 +58,7 @@ pragma solidity >=0.5.0;
     param public_key: users public_key
     param token: the private key encoded static token
     */
-    /*function decode(string memory pub_key, string memory token)
+    function decode(string memory pub_key, string memory token)
         private
         pure
         returns (string memory)
@@ -79,7 +72,7 @@ pragma solidity >=0.5.0;
     /*
     Pass user public key to survey for participation
     */
-    /*function survey_user() private {
+    function survey_user() private {
         // todo: register user with survey by passing public key
         // the pub key can be used later on for verification:
         // surveyKey(userKey(respone))) => user signed, contract encoded
@@ -88,7 +81,7 @@ pragma solidity >=0.5.0;
     /*
     Getter for the users public key
     */
-    /*function getPubKey() public view returns (string memory) {
+    function getPubKey() public view returns (string memory) {
         return public_key;
     }
 
@@ -96,7 +89,7 @@ pragma solidity >=0.5.0;
     param: private key encoded static token
     return: boolean if priv key belongs to pub key
     */
-    /*function verify_user_participation(string memory token)
+    function verify_user_participation(string memory token)
         public
         view
         returns (bool)
@@ -107,7 +100,7 @@ pragma solidity >=0.5.0;
     /*
     If the survey is completed it calls the participation contract to release the participants deposite
     */
-    /*function release_deposit(string memory token) public view{
+    function release_deposit(string memory token) public view{
         if (compare(static_token, decode(public_key, token))) {
             // release deposite to user
         }
@@ -126,4 +119,4 @@ pragma solidity >=0.5.0;
         else if (a.length > b.length) return false;
         else return true;
     }
-} */
+}
