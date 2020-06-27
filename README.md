@@ -35,3 +35,22 @@ Make sure that the contract is deployed. Open the tab *Contracts* in [Ganache](h
 
 ### Metamask called multiple times
 Make sure only one tab of the webapp (webpage) is open at a given time.
+
+### Calling functions and dirrefences betweek call() and send()
+>There is no explicit warning if you are using the wrong method to call your smart contract function!
+
+There are two options:
+```js
+contractInstance.methods.methodName().call()
+contractInstance.methods.methodName().send(options)
+```
+1. [`call()`](https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html#contract-call) can be used for views and methods that do not alter the contract's state. 
+2. [`send(options)`](https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html#contract-send) need to be called with the `options` argument, for example like this:
+```js
+web3.eth.getAccounts().then(accounts => {
+  const options = { from: accounts[0] };
+  contractInstance.methods.methodName(paramsForMenthod).send(options).then(console.log);
+  })
+```
+
+See [this post](https://bitsofco.de/calling-smart-contract-functions-using-web3-js-call-vs-send/) or the docs of the [web3.js Contract](https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html) class.
