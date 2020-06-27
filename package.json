@@ -4,7 +4,7 @@
   "description": "",
   "main": "truffle.js",
   "scripts": {
-    "start": "truffle deploy && lite-server"
+    "start": "truffle compile --all && lite-server"
   },
   "author": "Group Bubble",
   "license": "ISC",
