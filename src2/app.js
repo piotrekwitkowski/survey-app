@@ -14,39 +14,50 @@ class AppElement extends LitElement {
 
     fetch("Master.json")
       .then(res => res.json())
-      .then(contract => {
-        console.log('abi:', contract);
-        this.masterInstance = new web3.eth.Contract(contract.abi)
+      .then(contractJSON => {
+        console.log('contractJSON:', contractJSON);
+
+        // this.masterInstance = new web3.eth.Contract(contractJSON.abi)
+        web3.eth.net.getId().then(networkId => {
+          const deployedAddress = contractJSON.networks[networkId].address;
+          this.masterInstance = new web3.eth.Contract(contractJSON.abi, deployedAddress)
+        })
       })
   }
 
   static get properties() {
     return {
       masterInstance: { type: Object },
+      surveys: { type: Array },
     }
   }
 
   updated(changedProperties) {
     if (changedProperties.has('masterInstance')) {
       console.log('masterInstance', this.masterInstance);
-      this.masterInstance.methods.getSurveys().then(surveys => {
-        console.log('surveys:', surveys);
-        this.surveys = surveys;
-      })
+      this.reloadSurveys();
     }
   }
 
-  render() {
-    console.log('render');
+  reloadSurveys() {
+    this.masterInstance.methods.getSurveys().call().then(surveys => {
+      console.log('surveys:', surveys);
+      this.surveys = surveys;
+    })
+  }
 
+  render() {
     return html`
       <div class="container">
         <div class="row">
           <div class="col">
-            <p>surveyInstance is ${this.surveyInstance ? 'present' : 'not present'}, surveyState is ${this.surveyState ? this.surveyState : 'not present'}</p>
-            ${this.surveyState == 0 ? html`<x-state-created .surveyInstance=${this.surveyInstance} .web3=${this.web3}></x-state-created>` : ''}
-            ${this.surveyState == 1 ? html`<x-state-open/>` : ''}
-            ${this.surveyState == 2 ? html`<x-state-ended/>` : ''}
+            <p>Master contract instance is ${this.masterInstance ? 'present' : 'not present'}</p>
+            <button type="button" class="btn btn-secondary" @click=${this.reloadSurveys}>Reload surveys</button>
+
+            ${this.surveys ? html`
+              <p>this.surveys.length is ${this.surveys.length}<p>
+              ${this.surveys.map(survey => html`<x-survey .survey=${survey}></x-survey>`)}
+            ` : html`No surveys`}
           </div>
         </div>
       </div>
