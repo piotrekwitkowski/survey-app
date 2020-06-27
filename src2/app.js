@@ -46,6 +46,11 @@ class AppElement extends LitElement {
     })
   }
 
+  createSurvey() {
+    console.log('createSurvey');
+    this.masterInstance.methods.createSurvey(["Question1"]).call().then(() => console.log('survey created!'))
+  }
+
   render() {
     return html`
       <div class="container">
@@ -58,6 +63,8 @@ class AppElement extends LitElement {
               <p>this.surveys.length is ${this.surveys.length}</p>
               ${this.surveys.map(survey => html`<x-survey .survey=${survey}></x-survey>`)}
             ` : html`No surveys`}
+            <button type="button" class="btn btn-success" @click=${this.createSurvey}>Create test survey</button>
+
           </div>
         </div>
       </div>
