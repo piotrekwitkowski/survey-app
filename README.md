@@ -40,12 +40,14 @@ Make sure only one tab of the webapp (webpage) is open at a given time.
 >There is no explicit warning if you are using the wrong method to call your smart contract function!
 
 There are two options:
+
 ```js
 contractInstance.methods.methodName().call()
 contractInstance.methods.methodName().send(options)
 ```
 1. [`call()`](https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html#contract-call) can be used for views and methods that do not alter the contract's state. 
 2. [`send(options)`](https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html#contract-send) need to be called with the `options` argument, for example like this:
+
 ```js
 web3.eth.getAccounts().then(accounts => {
   const options = { from: accounts[0] };
