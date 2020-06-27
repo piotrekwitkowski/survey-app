@@ -1,11 +1,13 @@
 console.log('app.js loaded');
 import { LitElement, html, css } from 'https://unpkg.com/lit-element/lit-element.js?module';
+import './x-survey.js';
 
 class AppElement extends LitElement {
   createRenderRoot() { return this; }
 
   constructor() {
     super();
+    ethereum.enable();
     console.log('web3 version:', web3.version);
     console.log('switching to window.web3 provider...');
     web3 = new Web3(window.web3.currentProvider);
@@ -48,7 +50,12 @@ class AppElement extends LitElement {
 
   createSurvey() {
     console.log('createSurvey');
-    this.masterInstance.methods.createSurvey(["Question1"]).call().then(() => console.log('survey created!'))
+    web3.eth.getAccounts().then(accounts => {
+      // const account = accounts[0];
+      const options = {from: accounts[0]};
+      this.masterInstance.methods.createSurvey(["Question1"]).send(options).then(() => console.log('survey created!'))
+
+    })
   }
 
   render() {
@@ -63,6 +70,11 @@ class AppElement extends LitElement {
               <p>this.surveys.length is ${this.surveys.length}</p>
               ${this.surveys.map(survey => html`<x-survey .survey=${survey}></x-survey>`)}
             ` : html`<p>No surveys</p>`}
+
+            <!-- <p>-----------------------------------</p>
+            <label class="flex-fill mr-2">How many participants?</label>
+            <input type="number" class="flex-fill form-control m-2" value=${this.participants}>
+            <button type="button" class="btn btn-primary m-2" @click=${this.addQuestion}>Add questions</button> -->
 
             <button type="button" class="btn btn-success" @click=${this.createSurvey}>Create test survey</button>
 

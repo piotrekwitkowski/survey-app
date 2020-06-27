@@ -12,17 +12,17 @@ contract Master {
         return surveys;
     }
 
-    function createSurvey(string[] memory questions) public payable {
+    function createSurvey(string[] memory questions) public {
         // can be called by everyone who wants to start a new survey via frontend
         // erstellt eine Instanz von Survey
         address initiator = msg.sender;
         Survey survey = new Survey(initiator);
-        if (msg.value < survey._maxParticipants() * payment) {
-            revert("Payment for participants is not sufficient");
-        } else {
-            survey.init(questions);
-            surveys.push(survey);
-        }
+        // if (msg.value < survey._maxParticipants() * payment) {
+        //     revert("Payment for participants is not sufficient");
+        // } else {
+        surveys.push(survey);
+        survey.init(questions);
+        // }
     }
 
     function participateInSurvey(string[] memory answers, Survey survey)
