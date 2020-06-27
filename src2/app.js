@@ -51,10 +51,11 @@ class AppElement extends LitElement {
   createSurvey() {
     console.log('createSurvey');
     web3.eth.getAccounts().then(accounts => {
-      // const account = accounts[0];
-      const options = {from: accounts[0]};
-      this.masterInstance.methods.createSurvey(["Question1"]).send(options).then(() => console.log('survey created!'))
-
+      const options = { from: accounts[0] };
+      this.masterInstance.methods.createSurvey(["Question1"]).send(options).then(transaction => {
+        console.log('transaction:', transaction);
+        this.reloadSurveys();  
+      });
     })
   }
 
