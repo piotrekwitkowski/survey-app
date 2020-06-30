@@ -25,38 +25,38 @@ contract Master {
         // }
     }
 
-    function participateInSurvey(string[] memory answers, Survey survey)
-        public
-        payable
-    {
-        address caller = msg.sender;
-        // deposit hinterlegen
-        if (msg.value < deposit) {
-            revert("Payment was lower than requested deposit");
-        } else {
-            survey.participate(answers, caller);
-            if (survey.finish() == true) {
-                returnDeposit(survey.getParticipantList(), survey);
-            }
-        }
-    }
+    // function participateInSurvey(string[] memory answers, Survey survey)
+    //     public
+    //     payable
+    // {
+    //     address caller = msg.sender;
+    //     // deposit hinterlegen
+    //     if (msg.value < deposit) {
+    //         revert("Payment was lower than requested deposit");
+    //     } else {
+    //         survey.participate(answers, caller);
+    //         if (survey.finish() == true) {
+    //             returnDeposit(survey.getParticipantList(), survey);
+    //         }
+    //     }
+    // }
 
-    function getSurveyAnswers(Survey survey)
-        public
-        view
-        returns (string[][] memory)
-    {
-        return survey.getAnswers();
-    }
+    // function getSurveyAnswers(Survey survey)
+    //     public
+    //     view
+    //     returns (string[][] memory)
+    // {
+    //     return survey.getAnswers();
+    // }
 
-    function returnDeposit(address[] memory participantsList, Survey survey)
-        private
-    {
-        for (uint256 i = 0; i < survey._maxParticipants(); i++) {
-            address participant = participantsList[i];
-            address(uint160(participant)).transfer(deposit + payment);
-        }
-    }
+    // function returnDeposit(address[] memory participantsList, Survey survey)
+    //     private
+    // {
+    //     for (uint256 i = 0; i < survey._maxParticipants(); i++) {
+    //         address participant = participantsList[i];
+    //         address(uint160(participant)).transfer(deposit + payment);
+    //     }
+    // }
 
     // should be fired automatically!
     // function finishSurvey(Survey survey) public {
