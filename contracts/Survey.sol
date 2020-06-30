@@ -8,16 +8,17 @@ contract Survey {
     enum State {CREATED, OPEN, ENDED}
 
     address private _owner;
+
+    string private _name;
     string[] private _questions;
-    string[][] private _answers;
     uint256 private _participants;
-    uint256 public _maxParticipants = 3;
+    uint256 public _maxParticipants;
     uint256 constant _deposit = 10 wei;
     uint256 constant _reward = 1 wei;
-    address[] private participantsList;
-    bool public finish = false;
 
-    string public name;
+    address[] private participantsList;
+    string[][] private _answers;
+
     State public state;
 
     constructor(address owner) public {
@@ -41,20 +42,20 @@ contract Survey {
         _;
     }
 
-    // function init(string[] memory questions, uint memory maxParticipants)
-    function init(string[] memory questions)
+    function init(string[] memory questions, uint256 maxParticipants)
         public
+        // function init(string[] memory questions)
         // onlyOwner
         requireStateCreated
     {
         _questions = questions;
-        // _maxParticipants = maxParticipants;
+        _maxParticipants = maxParticipants;
         state = State.OPEN;
     }
 
     // function getInfo() public view onlyOwner returns (string[] memory) {
-    function getInfo() public view returns (string[] memory) {
-        return _questions;
+    function getInfo() public view returns (string memory, string[] memory, uint256, uint256, uint256, uint256) {
+        return (_name, _questions, _participants, _maxParticipants, _deposit, _reward);
     }
 
     function participate(
@@ -70,7 +71,6 @@ contract Survey {
 
         if (_participants == _maxParticipants) {
             state = State.ENDED;
-            finish = true;
         }
     }
 
