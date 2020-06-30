@@ -44,7 +44,6 @@ contract Survey {
 
     function init(string memory name, string[] memory questions, uint256 maxParticipants)
         public
-        // function init(string[] memory questions)
         // onlyOwner
         requireStateCreated
     {
@@ -54,7 +53,6 @@ contract Survey {
         state = State.OPEN;
     }
 
-    // function getInfo() public view onlyOwner returns (string[] memory) {
     function getInfo() public view returns (string memory, string[] memory, uint256, uint256, uint256, uint256) {
         return (_name, _questions, _participants, _maxParticipants, _deposit, _reward);
     }
