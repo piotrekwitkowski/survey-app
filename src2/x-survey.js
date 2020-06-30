@@ -75,7 +75,12 @@ class SurveyElement extends LitElement {
             <div class="modal-body">
               <p><b>Deposit of this survey:</b> ${this.instanceData.deposit}wei</p>
               <p><b>Reward for this survey:</b> ${this.instanceData.reward}wei (paid when the survey is complete)</p>
-              ${this.instanceData.questions.map(question => html`${question}`)}
+              ${this.instanceData.questions.map(question => html`
+                <div class='m-2'>
+                  <label class="flex-fill mr-2">${question}</label>
+                  <input class="flex-fill form-control">
+                </div>
+                `)}
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-success">Save answers</button>
