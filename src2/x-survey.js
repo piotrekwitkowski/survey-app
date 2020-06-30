@@ -44,20 +44,21 @@ class SurveyElement extends LitElement {
 
   render() {
     return html`
-      <b>Address:</b> ${this.address}<br>
-      ${this.instanceData ? html`
-        <b>Name:</b> ${this.instanceData.name}<br>
-        <b>Questions:</b> ${this.instanceData.questions}<br>
-        <b>Participants:</b> ${this.instanceData.participants}/${this.instanceData.maxParticipants}<br>
-        <b>Deposit:</b> ${this.instanceData.deposit} wei, <b>Reward:</b> ${this.instanceData.reward} wei<br>
-      `: html`Instance data not loaded yet.`}
-      
-      <p>
-        <button type="button" class="btn btn-secondary" @click=${this.logInstance}>Log instance</button>
-        <!-- <button type="button" class="btn btn-secondary" @click=${this.logQuestions}>Log questions</button> -->
-        <!-- <button type="button" class="btn btn-secondary" @click=${() => this.logParticipants()}>Log participants</button> -->
-        <!-- <button type="button" class="btn btn-secondary" @click=${this.logMaxParticipants}>Log max participants</button> -->
-      </p>
+      <div style="padding-bottom:1rem">
+        ${this.instanceData ? html`
+          <h4>${this.instanceData.name}</h4>
+          <b>Address:</b> ${this.address}<br>
+          <b>Participants:</b> ${this.instanceData.participants}/${this.instanceData.maxParticipants},
+          <b>Deposit:</b> ${this.instanceData.deposit} wei,
+          <b>Reward:</b> ${this.instanceData.reward} wei<br>
+          <b>Questions:</b>
+            <ol>
+              ${this.instanceData.questions.map(q => html`<li>${q}</li>`)}
+            </ol>
+          <button type="button" class="btn btn-outline-secondary btn-sm" @click=${this.logInstance}>Log instance</button>
+          <button type="button" class="btn btn-outline-success btn-sm" @click=${this.participate}>Participate</button>
+        `: html`Instance data not loaded yet, check console.`}
+      </div>  
     `;
   }
 }

@@ -74,8 +74,9 @@ class AppElement extends LitElement {
 
             ${this.surveys ? html`
               <p>Surveys count: ${this.surveys.length}</p>
-              ${this.surveys.map(address => html`<x-survey .address=${address}></x-survey>`)}
-            ` : html`<p>No surveys</p>`}
+              ${this.surveys.map(address => html`
+                <x-survey .address=${address}></x-survey>
+                `)}` : html`<p>No surveys</p>`}
 
             <!-- <p>-----------------------------------</p>
             <label class="flex-fill mr-2">How many participants?</label>
