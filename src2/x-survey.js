@@ -56,9 +56,33 @@ class SurveyElement extends LitElement {
               ${this.instanceData.questions.map(q => html`<li>${q}</li>`)}
             </ol>
           <button type="button" class="btn btn-outline-secondary btn-sm" @click=${this.logInstance}>Log instance</button>
-          <button type="button" class="btn btn-outline-success btn-sm" @click=${this.participate}>Participate</button>
+          <!-- <button type="button" class="btn btn-outline-success btn-sm" @click=${this.participate}>Participate</button> -->
+          <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#paritcipateModal">Participate</button>
         `: html`Instance data not loaded yet, check console.`}
-      </div>  
+      </div>
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="paritcipateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Participate</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p><b>Deposit of this survey:</b> ${this.instanceData.deposit}wei</p>
+              <p><b>Reward for this survey:</b> ${this.instanceData.reward}wei (paid when the survey is complete)</p>
+              ${this.instanceData.questions.map(question => html`${question}`)}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-success">Save answers</button>
+            </div>
+          </div>
+        </div>
+      </div>
     `;
   }
 }
