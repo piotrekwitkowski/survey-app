@@ -76,7 +76,7 @@ class SurveyElement extends LitElement {
               <p><b>Deposit of this survey:</b> ${this.instanceData.deposit}wei</p>
               <p><b>Reward for this survey:</b> ${this.instanceData.reward}wei (paid when the survey is complete)</p>
               ${this.instanceData.questions.map(question => html`
-                <div class='m-2'>
+                <div class='my-2'>
                   <label class="flex-fill mr-2">${question}</label>
                   <input class="flex-fill form-control">
                 </div>
