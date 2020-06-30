@@ -55,7 +55,7 @@ class AppElement extends LitElement {
       const options = { from: accounts[0] };
       this.masterInstance.methods.createSurvey(["Question1"], 1).send(options).then(transaction => {
         console.log('transaction:', transaction);
-        this.reloadSurveys();  
+        this.reloadSurveys();
       });
     })
   }
@@ -65,11 +65,15 @@ class AppElement extends LitElement {
       <div class="container">
         <div class="row">
           <div class="col">
-            <p>Master contract instance is ${this.masterInstance ? 'loaded' : 'not present'}</p>
-            <button type="button" class="btn btn-secondary" @click=${this.reloadSurveys}>Reload surveys</button>
+            ${this.masterInstance ?
+        html`<span class="badge badge-pill badge-success">Master contract OK</span>` :
+        html`<span class="badge badge-pill badge-danger">Master contract instance not loaded!</span>`}
+            
+            <!-- <br> -->
+            <!-- <button type="button" class="btn btn-outline-secondary btn-sm" @click=${this.reloadSurveys}>Reload surveys</button> -->
 
             ${this.surveys ? html`
-              <p>this.surveys.length is ${this.surveys.length}</p>
+              <p>Surveys count: ${this.surveys.length}</p>
               ${this.surveys.map(address => html`<x-survey .address=${address}></x-survey>`)}
             ` : html`<p>No surveys</p>`}
 
