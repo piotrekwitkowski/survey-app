@@ -12,6 +12,8 @@ contract Survey {
     string[][] private _answers;
     uint256 private _participants;
     uint256 public _maxParticipants = 3;
+    uint256 constant _deposit = 10 wei;
+    uint256 constant _reward = 1 wei;
     address[] private participantsList;
     bool public finish = false;
 

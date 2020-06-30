@@ -4,8 +4,6 @@ pragma experimental ABIEncoderV2;
 import "./Survey.sol";
 
 contract Master {
-    uint256 constant deposit = 10 ether;
-    uint256 constant payment = 4 ether;
     Survey[] public surveys;
 
     function getSurveys() public view returns (Survey[] memory) {
