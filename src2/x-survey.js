@@ -42,6 +42,12 @@ class SurveyElement extends LitElement {
     console.log('instance:', this.instance);
   }
 
+  sendAnswer() {
+    let answer = document.querySelector('input').value;
+    const senderAddress = web3.currentProvider.selectedAddress;
+    this.instance.methods.participate([answer], senderAddress).send({from:senderAddress});
+  }
+
   render() {
     return html`
       <div style="padding-bottom:1rem">
@@ -83,7 +89,7 @@ class SurveyElement extends LitElement {
                 `)}
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-success">Save answers</button>
+              <button type="button" class="btn btn-outline-success" data-dismiss="modal" @click=${this.sendAnswer}>Save answers</button>
             </div>
           </div>
         </div>
