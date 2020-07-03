@@ -39,7 +39,7 @@ class SurveyElement extends LitElement {
   }
 
   logInstance() {
-    console.log('instance:', this.instance);
+    console.log('instance:', this.instance, this.instanceData);
   }
 
   sendAnswer() {
@@ -59,15 +59,15 @@ class SurveyElement extends LitElement {
     return html`
       <div style="padding-bottom:1rem">
         ${this.instanceData ? html`
-          <h4>${this.instanceData.name}</h4>
+          <h4>${this.instanceData.name ? this.instanceData.name : '(no title saved)'}</h4>
           <b>Address:</b> ${this.address}<br>
           <b>Participants:</b> ${this.instanceData.participants}/${this.instanceData.maxParticipants},
           <b>Deposit:</b> ${this.instanceData.deposit} wei,
           <b>Reward:</b> ${this.instanceData.reward} wei<br>
-          <b>Questions:</b>
-            <ol>
-              ${this.instanceData.questions.map(q => html`<li>${q}</li>`)}
-            </ol>
+          <b>Questions:</b> ${this.instanceData.questions.length ? html`
+            <ol>${this.instanceData.questions.map(q => html`<li>${q}</li>`)}</ol>
+          `: html`(no questions saved)<br>`}
+
           <button type="button" class="btn btn-outline-primary btn-sm" @click=${this.logInstance}>Log instance</button>
           ${this.instanceData.participants < this.instanceData.maxParticipants ?
           html`<button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#' + participateModalId}>Participate</button>` :
