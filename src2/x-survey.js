@@ -44,7 +44,7 @@ class SurveyElement extends LitElement {
 
   sendAnswer() {
     console.log('sendAnswer');
-    const answers = ['TestAnswer'];
+    const answers = Array.from(this.renderRoot.querySelectorAll('input')).map(input => input.value);
     const options = { from: web3.currentProvider.selectedAddress };
 
     console.log('answers:', answers, 'options:', options);
