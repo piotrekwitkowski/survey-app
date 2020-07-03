@@ -49,7 +49,6 @@ class AppElement extends LitElement {
   }
 
   createSurvey() {
-    console.log('createSurvey');
     const options = { from: web3.currentProvider.selectedAddress };
 
     const name = this.renderRoot.querySelector('#newSurveyName').value;
@@ -58,7 +57,7 @@ class AppElement extends LitElement {
     const reward = this.renderRoot.querySelector('#newSurveyReward').value;
     const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';');
 
-    console.log('createSurvey', questions)
+    console.log('createSurvey', name, participants, deposit, reward, questions);
 
     this.masterInstance.methods.createSurvey(name, questions, participants).send(options).then(transaction => {
       console.log('createSurvey transaction:', transaction);
