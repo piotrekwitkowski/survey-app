@@ -68,9 +68,11 @@ class SurveyElement extends LitElement {
             <ol>
               ${this.instanceData.questions.map(q => html`<li>${q}</li>`)}
             </ol>
-          <button type="button" class="btn btn-outline-secondary btn-sm" @click=${this.logInstance}>Log instance</button>
-          <!-- <button type="button" class="btn btn-outline-success btn-sm" @click=${this.participate}>Participate</button> -->
-          <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#'+participateModalId}>Participate</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" @click=${this.logInstance}>Log instance</button>
+          ${this.instanceData.participants < this.instanceData.maxParticipants ?
+          html`<button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#' + participateModalId}>Participate</button>` :
+          html`<button type="button" class="btn btn-outline-secondary btn-sm" disabled>All participants reached</button>`}
+          
         `: html`Instance data not loaded yet, check console.`}
       </div>
 
