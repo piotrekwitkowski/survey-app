@@ -60,12 +60,10 @@ contract Survey {
     function participate(
         // address public_key,
         // address participantAddress,
-        string[] memory answers,
-        address caller
+        string[] memory answers
     ) public requireStateOpen {
         //Participate participant = new Participate(this, caller);
-        participantsList.push(caller);
-        _answers[_participants] = answers;
+        _answers.push(answers);
         _participants++;
 
         if (_participants == _maxParticipants) {

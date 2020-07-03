@@ -43,9 +43,15 @@ class SurveyElement extends LitElement {
   }
 
   sendAnswer() {
-    let answer = document.querySelector('input').value;
-    const senderAddress = web3.currentProvider.selectedAddress;
-    this.instance.methods.participate([answer], senderAddress).send({from:senderAddress});
+    console.log('sendAnswer');
+    const answers = ['TestAnswer'];
+    const options = { from: web3.currentProvider.selectedAddress };
+
+    console.log('answers:', answers, 'options:', options);
+    this.instance.methods.participate(answers).send(options).then(transaction => {
+      console.log('sendAnswer transaction:', transaction);
+      this.loadInstanceData();
+    })
   }
 
   render() {
