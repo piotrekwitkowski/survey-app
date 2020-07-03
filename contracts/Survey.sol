@@ -70,6 +70,8 @@ contract Survey {
 
         if (_participants == _maxParticipants) {
             state = State.ENDED;
+            // TODO: move state change to another private function that will
+            // handle rewarding the participants when the survey is ended
         }
     }
 
