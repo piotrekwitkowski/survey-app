@@ -13,6 +13,7 @@
     "lite-server": "^2.5.4"
   },
   "devDependencies": {
-    "lit-element": "^2.3.1"
+    "lit-element": "^2.3.1",
+    "truffle": "^5.1.32"
   }
 }
