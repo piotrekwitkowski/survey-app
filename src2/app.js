@@ -49,13 +49,20 @@ class AppElement extends LitElement {
   }
 
   createSurvey() {
-    const options = { from: web3.currentProvider.selectedAddress };
 
     const name = this.renderRoot.querySelector('#newSurveyName').value;
     const participants = this.renderRoot.querySelector('#newSurveyParticipants').value || 0;
     const deposit = this.renderRoot.querySelector('#newSurveyDeposit').value || 0;
     const reward = this.renderRoot.querySelector('#newSurveyReward').value || 0;
     const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';').filter(x => x);
+
+
+    const options = {
+      from: web3.currentProvider.selectedAddress,
+      value: web3.utils.toWei("" + participants * reward, 'wei')
+      // it really works, wei is really small and MetaMask will often show it as simply '0 eth'
+      // but Ganache displays the value of the transaction correctly
+    };
 
     console.log('createSurvey', 'name:', name, 'participants:', participants, 'deposit:', deposit, 'reward:', reward, 'questions', questions);
 
