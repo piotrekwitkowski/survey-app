@@ -55,6 +55,7 @@ class SurveyElement extends LitElement {
   }
 
   render() {
+    const participateModalId = `participateModal${this.address}`;
     return html`
       <div style="padding-bottom:1rem">
         ${this.instanceData ? html`
@@ -69,13 +70,13 @@ class SurveyElement extends LitElement {
             </ol>
           <button type="button" class="btn btn-outline-secondary btn-sm" @click=${this.logInstance}>Log instance</button>
           <!-- <button type="button" class="btn btn-outline-success btn-sm" @click=${this.participate}>Participate</button> -->
-          <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#paritcipateModal">Participate</button>
+          <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#'+participateModalId}>Participate</button>
         `: html`Instance data not loaded yet, check console.`}
       </div>
 
 
       <!-- Modal -->
-      <div class="modal fade" id="paritcipateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id=${participateModalId} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
