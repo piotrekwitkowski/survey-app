@@ -52,14 +52,14 @@ class AppElement extends LitElement {
     const options = { from: web3.currentProvider.selectedAddress };
 
     const name = this.renderRoot.querySelector('#newSurveyName').value;
-    const participants = this.renderRoot.querySelector('#newSurveyParticipants').value;
-    const deposit = this.renderRoot.querySelector('#newSurveyDeposit').value;
-    const reward = this.renderRoot.querySelector('#newSurveyReward').value;
-    const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';');
+    const participants = this.renderRoot.querySelector('#newSurveyParticipants').value || 0;
+    const deposit = this.renderRoot.querySelector('#newSurveyDeposit').value || 0;
+    const reward = this.renderRoot.querySelector('#newSurveyReward').value || 0;
+    const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';').filter(x => x);
 
-    console.log('createSurvey', name, participants, deposit, reward, questions);
+    console.log('createSurvey', 'name:', name, 'participants:', participants, 'deposit:', deposit, 'reward:', reward, 'questions', questions);
 
-    this.masterInstance.methods.createSurvey(name, questions, participants).send(options).then(transaction => {
+    this.masterInstance.methods.createSurvey(name, participants, deposit, reward, questions).send(options).then(transaction => {
       console.log('createSurvey transaction:', transaction);
       this.reloadSurveys();
     })

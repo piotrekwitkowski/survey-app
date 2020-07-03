@@ -10,11 +10,11 @@ contract Survey {
     address private _owner;
 
     string private _name;
-    string[] private _questions;
     uint256 private _participants;
-    uint256 public _maxParticipants;
-    uint256 constant _deposit = 10 wei;
-    uint256 constant _reward = 1 wei;
+    uint256 private _maxParticipants;
+    uint256 private _deposit;
+    uint256 private _reward;
+    string[] private _questions;
 
     address[] private participantsList;
     string[][] private _answers;
@@ -42,14 +42,16 @@ contract Survey {
         _;
     }
 
-    function init(string memory name, string[] memory questions, uint256 maxParticipants)
+    function init(string memory name, uint256 maxParticipants, uint256 deposit, uint256 reward, string[] memory questions)
         public
         // onlyOwner
         requireStateCreated
     {
         _name = name;
-        _questions = questions;
         _maxParticipants = maxParticipants;
+        _deposit = deposit * 1 wei;
+        _reward = reward * 1 wei;
+        _questions = questions;
         state = State.OPEN;
     }
 
