@@ -52,7 +52,15 @@ class AppElement extends LitElement {
     console.log('createSurvey');
     const options = { from: web3.currentProvider.selectedAddress };
 
-    this.masterInstance.methods.createSurvey("Test name", ["Question1"], 1).send(options).then(transaction => {
+    const name = this.renderRoot.querySelector('#newSurveyName').value;
+    const participants = this.renderRoot.querySelector('#newSurveyParticipants').value;
+    const deposit = this.renderRoot.querySelector('#newSurveyDeposit').value;
+    const reward = this.renderRoot.querySelector('#newSurveyReward').value;
+    const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';');
+
+    console.log('createSurvey', questions)
+
+    this.masterInstance.methods.createSurvey(name, questions, participants).send(options).then(transaction => {
       console.log('createSurvey transaction:', transaction);
       this.reloadSurveys();
     })
@@ -76,13 +84,48 @@ class AppElement extends LitElement {
                 <x-survey .address=${address}></x-survey>
                 `)}` : html`<p>No surveys</p>`}
 
-            <!-- <p>-----------------------------------</p>
-            <label class="flex-fill mr-2">How many participants?</label>
-            <input type="number" class="flex-fill form-control m-2" value=${this.participants}>
-            <button type="button" class="btn btn-primary m-2" @click=${this.addQuestion}>Add questions</button> -->
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target='#createSurveyModal'>New survey</button>
+          </div>
+        </div>
+      </div>
 
-            <button type="button" class="btn btn-success" @click=${this.createSurvey}>Create test survey</button>
+      <!-- Modal -->
+      <div class="modal fade" id="createSurveyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">New survey</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
 
+            <div class="modal-body">
+              <div class="m-2">
+                <label class="flex-fill mr-2">Survey name</label>
+                <input type="text" class="form-control" id="newSurveyName">
+              </div>
+              <div class="m-2">
+                <label class="flex-fill mr-2">Number of participants</label>
+                <input type="number" class="form-control" id="newSurveyParticipants">
+              </div>
+              <div class="m-2">
+                <label class="flex-fill mr-2">Deposit of this survey (wei per participant)</label>
+                <input type="number" class="form-control" id="newSurveyDeposit">
+              </div>
+              <div class="m-2">
+                <label class="flex-fill mr-2">Reward for this survey (wei per participant)</label>
+                <input type="number" class="form-control" id="newSurveyReward">
+              </div>
+              <div class="m-2">
+                <label class="flex-fill mr-2">Questions (split with ;)</label>
+                <input type="text" class="form-control" id="newSurveyQuestions">
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-success" data-dismiss="modal"  @click=${this.createSurvey}>Create survey</button>
+            </div>
           </div>
         </div>
       </div>
