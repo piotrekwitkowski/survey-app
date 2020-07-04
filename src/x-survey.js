@@ -55,6 +55,13 @@ class SurveyElement extends LitElement {
     })
   }
 
+  stateDictionary(state) {
+    if (state == 0) return "CREATED";
+    if (state == 1) return "OPEN";
+    if (state == 2) return "ENDED";
+    return `UNKNOWN ${state}`
+  }
+
   render() {
     const participateModalId = `participateModal${this.address}`;
     return html`
@@ -62,6 +69,7 @@ class SurveyElement extends LitElement {
         ${this.instanceData ? html`
           <h4>${this.instanceData.name ? this.instanceData.name : '(no title saved)'}</h4>
           <b>Address:</b> ${this.address}<br>
+          <b>State:</b> ${this.stateDictionary(this.instanceData.state)},
           <b>Participants:</b> ${this.instanceData.answersLength}/${this.instanceData.participants},
           <b>Deposit:</b> ${this.instanceData.deposit} wei,
           <b>Reward:</b> ${this.instanceData.reward} wei<br>
