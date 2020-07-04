@@ -9,7 +9,7 @@
   "author": "Group Bubble",
   "license": "ISC",
   "dependencies": {
-    "eth-crypto": "^1.6.0",
+    "eth-ecies": "^1.0.4",
     "lit-element": "^2.3.1"
   },
   "devDependencies": {

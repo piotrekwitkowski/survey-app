@@ -2,8 +2,11 @@
 import { LitElement, html, css } from 'lit-element';
 
 // import * as EthCrypto from 'https://unpkg.com/eth-crypto@1.6.0/dist/es/index.js?module';
-import * as EthCrypto from 'eth-crypto';
- console.log('ethCrypto:', EthCrypto)
+// import * as EthCrypto from 'eth-crypto';
+// console.log('ethCrypto:', EthCrypto)
+
+const ecies = require("eth-ecies");
+console.log('ecies', ecies)
 
 class SurveyElement extends LitElement {
   createRenderRoot() { return this; }
