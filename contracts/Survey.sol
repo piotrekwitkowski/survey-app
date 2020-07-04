@@ -18,7 +18,7 @@ contract Survey {
 
     State public state;
 
-    modifier onlyOwner {
+    modifier requireOwner {
         require(msg.sender == _owner, "Sender is not the owner");
         _;
     }
@@ -30,6 +30,11 @@ contract Survey {
 
     modifier requireStateOpen {
         require(state == State.OPEN, "Current state must be OPEN");
+        _;
+    }
+
+    modifier requireStateEnded {
+        require(state == State.ENDED, "Current state must be ENDED");
         _;
     }
 
@@ -102,8 +107,7 @@ contract Survey {
         }
     }
 
-    function getAnswers() public view returns (string[][] memory) {
-        require(state == State.ENDED, "State is not ENDED");
+    function getAnswers() public view requireOwner requireStateEnded returns (string[][] memory) {
         return _answers;
     }
 }

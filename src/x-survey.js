@@ -65,6 +65,12 @@ class SurveyElement extends LitElement {
     return `UNKNOWN ${state}`
   }
 
+  seeAnswers() {
+    this.instance.methods.getAnswers().call().then(answers => {
+      console.log('seeAnswers:', answers);
+    })
+  }
+
   render() {
     const participateModalId = `participateModal${this.address}`;
     return html`
@@ -86,7 +92,7 @@ class SurveyElement extends LitElement {
             <button type="button" class="btn btn-outline-secondary btn-sm" disabled>See answers</button>
             ` : html`
             <button type="button" class="btn btn-outline-secondary btn-sm" disabled>All participants reached</button>
-            <button type="button" class="btn btn-outline-success btn-sm">See answers</button>
+            <button type="button" class="btn btn-outline-success btn-sm" @click=${this.seeAnswers}>See answers</button>
           `}
           
         `: html`Instance data not loaded yet, check console.`}
