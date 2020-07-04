@@ -4,7 +4,6 @@
   "description": "",
   "main": "truffle.js",
   "scripts": {
-    "compile-and-serve": "truffle compile --all && lite-server",
     "start": "truffle deploy && lite-server"
   },
   "author": "Group Bubble",
