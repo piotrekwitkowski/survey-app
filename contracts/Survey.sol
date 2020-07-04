@@ -2,8 +2,6 @@
 pragma solidity >=0.5.0;
 pragma experimental ABIEncoderV2;
 
-//import "./Participate.sol";
-
 contract Survey {
     enum State {CREATED, OPEN, ENDED}
 
