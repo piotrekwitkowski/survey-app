@@ -12,22 +12,14 @@ contract Master {
 
     function createSurvey(
         string memory name,
-        uint256 maxParticipants,
+        uint256 participants,
         uint256 deposit,
         uint256 reward,
         string[] memory questions
     ) public payable {
-        // function createSurvey(string[] memory questions) public payable {
-        // can be called by everyone who wants to start a new survey via frontend
-        // erstellt eine Instanz von Survey
-        address initiator = msg.sender;
-        Survey survey = new Survey(initiator);
-        // if (msg.value < survey._maxParticipants() * payment) {
-        //     revert("Payment for participants is not sufficient");
-        // } else {
-        survey.init(name, maxParticipants, deposit, reward, questions);
+        Survey survey = new Survey(msg.sender);
+        survey.init.value(msg.value)(name, participants, deposit, reward, questions);
         surveys.push(survey);
-        // }
     }
 
     // function participateInSurvey(string[] memory answers, Survey survey)
