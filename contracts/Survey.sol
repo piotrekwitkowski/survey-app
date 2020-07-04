@@ -10,7 +10,6 @@ contract Survey {
     address private _owner;
 
     string private _name;
-    uint256 private _participants;
     uint256 private _maxParticipants;
     uint256 private _deposit;
     uint256 private _reward;
@@ -23,7 +22,6 @@ contract Survey {
 
     constructor(address owner) public {
         _owner = owner;
-        _participants = 0;
         state = State.CREATED;
     }
 
@@ -56,7 +54,7 @@ contract Survey {
     }
 
     function getInfo() public view returns (string memory, string[] memory, uint256, uint256, uint256, uint256) {
-        return (_name, _questions, _participants, _maxParticipants, _deposit, _reward);
+        return (_name, _questions, _answers.length, _maxParticipants, _deposit, _reward);
     }
 
     function participate(
@@ -66,9 +64,8 @@ contract Survey {
     ) public requireStateOpen {
         //Participate participant = new Participate(this, caller);
         _answers.push(answers);
-        _participants++;
 
-        if (_participants == _maxParticipants) {
+        if (_answers.length == _maxParticipants) {
             state = State.ENDED;
             // TODO: move state change to another private function that will
             // handle rewarding the participants when the survey is ended
