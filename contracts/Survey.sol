@@ -46,12 +46,7 @@ contract Survey {
         uint256 deposit,
         uint256 reward,
         string[] memory questions
-    )
-        public
-        payable
-        // onlyOwner
-        requireStateCreated
-    {
+    ) public payable requireStateCreated {
         if (msg.value == participants * reward) {
             _name = name;
             _participants = participants;
