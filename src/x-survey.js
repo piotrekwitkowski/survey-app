@@ -29,7 +29,7 @@ class SurveyElement extends LitElement {
     this.instance.methods.getInfo().call().then(data => {
       this.instanceData = {
         name: data[0],
-        participants: data[1],
+        totalParticipants: data[1],
         deposit: data[2],
         reward: data[3],
         questions: data[4],
@@ -46,7 +46,10 @@ class SurveyElement extends LitElement {
   sendAnswer() {
     console.log('sendAnswer');
     const answers = Array.from(this.renderRoot.querySelectorAll('input')).map(input => input.value);
-    const options = { from: web3.currentProvider.selectedAddress };
+    const options = {
+      from: web3.currentProvider.selectedAddress,
+      value: web3.utils.toWei("" + this.instanceData.deposit, 'wei')
+    };
 
     console.log('answers:', answers, 'options:', options);
     this.instance.methods.participate(answers).send(options).then(transaction => {
@@ -70,7 +73,7 @@ class SurveyElement extends LitElement {
           <h4>${this.instanceData.name ? this.instanceData.name : '(no title saved)'}</h4>
           <b>Address:</b> ${this.address}<br>
           <b>State:</b> ${this.stateDictionary(this.instanceData.state)},
-          <b>Participants:</b> ${this.instanceData.answersLength}/${this.instanceData.participants},
+          <b>Participants:</b> ${this.instanceData.answersLength}/${this.instanceData.totalParticipants},
           <b>Deposit:</b> ${this.instanceData.deposit} wei,
           <b>Reward:</b> ${this.instanceData.reward} wei<br>
           <b>Questions:</b> ${this.instanceData.questions.length ? html`
@@ -78,9 +81,13 @@ class SurveyElement extends LitElement {
           `: html`(no questions saved)<br>`}
 
           <button type="button" class="btn btn-outline-primary btn-sm" @click=${this.logInstance}>Log instance</button>
-          ${this.instanceData.answersLength < this.instanceData.participants ?
-          html`<button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#' + participateModalId}>Participate</button>` :
-          html`<button type="button" class="btn btn-outline-secondary btn-sm" disabled>All participants reached</button>`}
+          ${this.instanceData.answersLength < this.instanceData.totalParticipants ? html`
+            <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#' + participateModalId}>Participate</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>See answers</button>
+            ` : html`
+            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>All participants reached</button>
+            <button type="button" class="btn btn-outline-success btn-sm">See answers</button>
+          `}
           
         `: html`Instance data not loaded yet, check console.`}
       </div>

@@ -8,13 +8,13 @@ contract Survey {
     address private _owner;
 
     string private _name;
-    uint256 private _participants;
+    uint256 private _totalParticipants;
     uint256 private _deposit;
     uint256 private _reward;
     string[] private _questions;
 
-    address[] private participantsList;
     string[][] private _answers;
+    address payable[] private _participants;
 
     State public state;
 
@@ -47,7 +47,7 @@ contract Survey {
     ) public payable requireStateCreated {
         if (msg.value == participants * reward) {
             _name = name;
-            _participants = participants;
+            _totalParticipants = participants;
             _deposit = deposit * 1 wei;
             _reward = reward * 1 wei;
             _questions = questions;
@@ -74,7 +74,7 @@ contract Survey {
     {
         return (
             _name,
-            _participants,
+            _totalParticipants,
             _deposit,
             _reward,
             _questions,
@@ -83,27 +83,27 @@ contract Survey {
         );
     }
 
-    function participate(
-        // address public_key,
-        // address participantAddress,
-        string[] memory answers
-    ) public requireStateOpen {
-        //Participate participant = new Participate(this, caller);
+    function participate(string[] memory answers)
+        public
+        payable
+        requireStateOpen
+    {
         _answers.push(answers);
-        if (_answers.length == _participants) {
+        _participants.push(msg.sender);
+        if (_answers.length == _totalParticipants) {
             state = State.ENDED;
-            // TODO: move state change to another private function that will
-            // handle rewarding the participants when the survey is ended
+            rewardParticipants();
+        }
+    }
+
+    function rewardParticipants() private {
+        for (uint256 i = 0; i < _participants.length; i++) {
+            _participants[i].transfer(_deposit + _reward);
         }
     }
 
     function getAnswers() public view returns (string[][] memory) {
         require(state == State.ENDED, "State is not ENDED");
         return _answers;
-    }
-
-    function getParticipantList() public view returns (address[] memory) {
-        address[] memory List = participantsList;
-        return List;
     }
 }
