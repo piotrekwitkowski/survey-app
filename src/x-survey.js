@@ -1,5 +1,6 @@
 // import { LitElement, html, css } from 'https://unpkg.com/lit-element/lit-element.js?module';
 import { LitElement, html, css } from 'lit-element';
+import { Buffer } from 'safe-buffer';
 
 // import * as EthCrypto from 'https://unpkg.com/eth-crypto@1.6.0/dist/es/index.js?module';
 // import * as EthCrypto from 'eth-crypto';
@@ -7,6 +8,20 @@ import { LitElement, html, css } from 'lit-element';
 
 const ecies = require("eth-ecies");
 console.log('ecies', ecies)
+// console.log('ecies', ecies, Buffer)
+window.ecies = ecies;
+
+const publicKey = '4Aaa35F4E88c867d7643dA44B51e649AB8b2aEd8';
+const data = '{foo:"bar",baz:42}';
+
+
+// const enc = ecies.encrypt('4Aaa35F4E88c867d7643dA44B51e649AB8b2aEd8', [new Buffer('test', 'utf-8'));
+// window.Buffer = ecies.Buffer
+// console.log('enc:', enc)
+
+console.log(web3.shh.version)
+// web3.shh.newSymKey()
+// .then(console.log);
 
 class SurveyElement extends LitElement {
   createRenderRoot() { return this; }
@@ -25,6 +40,10 @@ class SurveyElement extends LitElement {
       this.instance = instance;
       this.loadInstanceData();
     })
+
+    // console.log(web3.shh)
+    // console.log(web3.shh.getInfo())
+    // console.log(web3.shh.getVersion())
   }
 
   async loadContractInstance() {

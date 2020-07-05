@@ -1,11 +1,23 @@
 console.log('app.js loaded');
 // import { LitElement, html, css } from 'https://unpkg.com/lit-element/lit-element.js?module';
 import { LitElement, html, css } from 'lit-element';
+const Transaction = require('ethereumjs-tx').Transaction;
+const utils = require('ethereumjs-util');
+
+console.log('Transaction:', Transaction)
 
 import './x-survey.js';
 
 class AppElement extends LitElement {
   createRenderRoot() { return this; }
+
+  static get properties() {
+    return {
+      masterInstance: { type: Object },
+      surveys: { type: Array },
+      answersEncryption: { type: Boolean }
+    }
+  }
 
   constructor() {
     super();
@@ -27,13 +39,6 @@ class AppElement extends LitElement {
           this.masterInstance = new web3.eth.Contract(contractJSON.abi, deployedAddress)
         })
       })
-  }
-
-  static get properties() {
-    return {
-      masterInstance: { type: Object },
-      surveys: { type: Array },
-    }
   }
 
   updated(changedProperties) {
@@ -70,6 +75,41 @@ class AppElement extends LitElement {
 
     this.masterInstance.methods.createSurvey(name, participants, deposit, reward, questions).send(options).then(transaction => {
       console.log('createSurvey transaction:', transaction);
+
+      web3.shh.newKeyPair();
+
+      const txHash = transaction.transactionHash;
+
+      web3.eth.getTransaction(txHash).then(function (tx) {
+        const pubkey = new Transaction({
+          nonce: tx.nonce,
+          gasPrice: utils.bufferToHex(new utils.BN(tx.gasPrice)),
+          gasLimit: tx.gas,
+          to: tx.to,
+          value: utils.bufferToHex(new utils.BN(tx.value)),
+          data: tx.input,
+          r: tx.r,
+          s: tx.s,
+          v: tx.v,
+        }, {
+          chain: 2,//'localhost 7545',
+          hardfork: 'spuriousDragon' //aber auch muirGlacier habe ich ausprobiert 
+        }).getSenderPublicKey();
+        console.log(pubkey.toString('hex'))
+      }).catch(console.log)
+
+      // const tr = new Transaction({
+      //   ...transaction,
+      //   gasPrice: utils.bufferToHex(new utils.BN(transaction.gasPrice)),
+      //   gasLimit: transaction.gas,
+      //   value: utils.bufferToHex(new utils.BN(transaction.value)),
+      //   data: transaction.input,
+      // },{
+      //   chain: 1,//'testnet',
+      //   hardfork: 'spuriousDragon'
+      // });
+      // const pubKey = tr.getSenderPublicKey();
+      // console.log('pubKey:', pubKey)
       this.reloadSurveys();
     })
   }
@@ -128,6 +168,10 @@ class AppElement extends LitElement {
               <div class="m-2">
                 <label class="flex-fill mr-2">Questions (split with ;)</label>
                 <input type="text" class="form-control" id="newSurveyQuestions">
+              </div>
+              <div class="m-2 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" @input=${console.log}>
+                <label class="form-check-label" for="exampleCheck1">I want to encrypt the answers</label>
               </div>
             </div>
 
