@@ -1,6 +1,4 @@
-console.log('app.js loaded');
-// import { LitElement, html, css } from 'https://unpkg.com/lit-element/lit-element.js?module';
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 import './x-survey.js';
 
 class AppElement extends LitElement {
@@ -18,17 +16,14 @@ class AppElement extends LitElement {
     super();
     ethereum.enable();
     console.log('web3 version:', web3.version);
-    console.log('switching to window.web3 provider...');
+    console.log('switching to window.web3.currentProvider');
     web3 = new Web3(window.web3.currentProvider);
-    console.log('web3:', web3);
-    console.log('new web3 version:', web3.version);
+    console.log('web3 new version:', web3.version);
 
     fetch("Master.json")
       .then(res => res.json())
       .then(contractJSON => {
         console.log('contractJSON:', contractJSON);
-
-        // this.masterInstance = new web3.eth.Contract(contractJSON.abi)
         web3.eth.net.getId().then(networkId => {
           const deployedAddress = contractJSON.networks[networkId].address;
           this.masterInstance = new web3.eth.Contract(contractJSON.abi, deployedAddress)
@@ -51,13 +46,11 @@ class AppElement extends LitElement {
   }
 
   createSurvey() {
-
     const name = this.renderRoot.querySelector('#newSurveyName').value;
     const participants = this.renderRoot.querySelector('#newSurveyParticipants').value || 0;
     const deposit = this.renderRoot.querySelector('#newSurveyDeposit').value || 0;
     const reward = this.renderRoot.querySelector('#newSurveyReward').value || 0;
     const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';').filter(x => x);
-
 
     const options = {
       from: web3.currentProvider.selectedAddress,
@@ -67,7 +60,6 @@ class AppElement extends LitElement {
     };
 
     console.log('createSurvey', 'name:', name, 'participants:', participants, 'deposit:', deposit, 'reward:', reward, 'questions', questions);
-
     this.masterInstance.methods.createSurvey(name, participants, deposit, reward, questions).send(options).then(transaction => {
       console.log('createSurvey transaction:', transaction);
       this.reloadSurveys();
@@ -79,18 +71,14 @@ class AppElement extends LitElement {
       <div class="container">
         <div class="row">
           <div class="col">
-            ${this.masterInstance ?
-        html`<span class="badge badge-pill badge-success">Master contract OK</span>` :
-        html`<span class="badge badge-pill badge-danger">Master contract instance not loaded!</span>`}
-            
-            <!-- <br> -->
-            <!-- <button type="button" class="btn btn-outline-secondary btn-sm" @click=${this.reloadSurveys}>Reload surveys</button> -->
-
+            ${this.masterInstance ? html`
+              <span class="badge badge-pill badge-success">Master contract OK</span>` : html`
+              <span class="badge badge-pill badge-danger">Master contract instance not loaded!</span>`}
+              
             ${this.surveys ? html`
               <p>Surveys count: ${this.surveys.length}</p>
-              ${this.surveys.map(address => html`
-                <x-survey .address=${address}></x-survey>
-                `)}` : html`<p>No surveys</p>`}
+              ${this.surveys.map(address => html`<x-survey .address=${address}></x-survey>`)}` : html`
+              <p>No surveys</p>`}
 
             <button type="button" class="btn btn-success" data-toggle="modal" data-target='#createSurveyModal'>New survey</button>
           </div>
