@@ -1,11 +1,18 @@
 console.log('app.js loaded');
 // import { LitElement, html, css } from 'https://unpkg.com/lit-element/lit-element.js?module';
 import { LitElement, html, css } from 'lit-element';
-
 import './x-survey.js';
 
 class AppElement extends LitElement {
   createRenderRoot() { return this; }
+
+  static get properties() {
+    return {
+      masterInstance: { type: Object },
+      surveys: { type: Array },
+      newSurveyEncrypted: { type: Boolean }
+    }
+  }
 
   constructor() {
     super();
@@ -27,13 +34,6 @@ class AppElement extends LitElement {
           this.masterInstance = new web3.eth.Contract(contractJSON.abi, deployedAddress)
         })
       })
-  }
-
-  static get properties() {
-    return {
-      masterInstance: { type: Object },
-      surveys: { type: Array },
-    }
   }
 
   updated(changedProperties) {
@@ -128,6 +128,14 @@ class AppElement extends LitElement {
               <div class="m-2">
                 <label class="flex-fill mr-2">Questions (split with ;)</label>
                 <input type="text" class="form-control" id="newSurveyQuestions">
+              </div>
+              <div class="mx-2 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" @input=${e => this.newSurveyEncrypted = e.target.checked}>
+                <label class="form-check-label" for="exampleCheck1">I want the answers to be encrypted with a public key </label>
+              </div>
+              <div class="m-2" .hidden=${!this.newSurveyEncrypted}>
+                <label class="flex-fill mr-2">Passphrase for RSA generation</label>
+                <input type="text" class="form-control" id="newSurveyPassphrase">
               </div>
             </div>
 
