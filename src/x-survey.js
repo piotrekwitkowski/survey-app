@@ -84,8 +84,8 @@ class SurveyElement extends LitElement {
           <b>Deposit:</b> ${this.instanceData.deposit} wei,
           <b>Reward:</b> ${this.instanceData.reward} wei<br>
           <b>Questions:</b> ${this.instanceData.questions.length ? html`
-            <ol>${this.instanceData.questions.map(q => html`<li>${q}</li>`)}</ol>
-          `: html`(no questions saved)<br>`}
+            <ol>${this.instanceData.questions.map(q => html`<li>${q}</li>`)}</ol>` : html`
+            (no questions saved)<br>`}
 
           <button type="button" class="btn btn-outline-primary btn-sm" @click=${this.logInstance}>Log instance</button>
           ${this.instanceData.answersLength < this.instanceData.totalParticipants ? html`
