@@ -6,6 +6,8 @@ module.exports = {
 
   entry: './src/x-app.js',
 
+  devtool: 'source-map',
+
   devServer: {
     contentBase: [path.join(__dirname, 'build/contracts'), path.join(__dirname, 'dist')],
     compress: true,
