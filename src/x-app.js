@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import './x-survey.js';
+const cryptico = require('cryptico-es6');
 
 class AppElement extends LitElement {
   createRenderRoot() { return this; }
@@ -52,6 +53,7 @@ class AppElement extends LitElement {
     const reward = this.renderRoot.querySelector('#newSurveyReward').value || 0;
     const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';').filter(x => x);
     const answersEncrypted = this.renderRoot.querySelector('#newSurveyAnswersEncrypted').checked;
+    const publicKey = answersEncrypted ? this.getPublicKey() : '';
 
     const options = {
       from: web3.currentProvider.selectedAddress,
@@ -60,11 +62,17 @@ class AppElement extends LitElement {
       // but Ganache displays the value of the transaction correctly
     };
 
-    console.log('createSurvey', 'name:', name, 'participants:', participants, 'deposit:', deposit, 'reward:', reward, 'questions', questions);
-    this.masterInstance.methods.createSurvey(name, participants, deposit, reward, questions, answersEncrypted).send(options).then(transaction => {
+    console.log('createSurvey', 'name:', name, 'participants:', participants, 'deposit:', deposit, 'reward:', reward, 'questions', questions, 'publicKey', publicKey);
+    this.masterInstance.methods.createSurvey(name, participants, deposit, reward, questions, publicKey).send(options).then(transaction => {
       console.log('createSurvey transaction:', transaction);
       this.reloadSurveys();
     })
+  }
+
+  getPublicKey() {
+    const passphrase = this.renderRoot.querySelector('#newSurveyPassphrase').value;
+    const senderPrivateKey = cryptico.generateRSAKey(passphrase, 1024);
+    return cryptico.publicKeyString(senderPrivateKey);
   }
 
   render() {

@@ -16,10 +16,10 @@ contract Master {
         uint256 deposit,
         uint256 reward,
         string[] memory questions,
-        bool answersEncrypted
+        string memory publicKey
     ) public payable {
         Survey survey = new Survey(msg.sender);
-        survey.init.value(msg.value)(name, participants, deposit, reward, questions, answersEncrypted);
+        survey.init.value(msg.value)(name, participants, deposit, reward, questions, publicKey);
         surveys.push(survey);
     }
 
