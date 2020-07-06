@@ -51,6 +51,7 @@ class AppElement extends LitElement {
     const deposit = this.renderRoot.querySelector('#newSurveyDeposit').value || 0;
     const reward = this.renderRoot.querySelector('#newSurveyReward').value || 0;
     const questions = this.renderRoot.querySelector('#newSurveyQuestions').value.split(';').filter(x => x);
+    const answersEncrypted = this.renderRoot.querySelector('#newSurveyAnswersEncrypted').checked;
 
     const options = {
       from: web3.currentProvider.selectedAddress,
@@ -60,7 +61,7 @@ class AppElement extends LitElement {
     };
 
     console.log('createSurvey', 'name:', name, 'participants:', participants, 'deposit:', deposit, 'reward:', reward, 'questions', questions);
-    this.masterInstance.methods.createSurvey(name, participants, deposit, reward, questions).send(options).then(transaction => {
+    this.masterInstance.methods.createSurvey(name, participants, deposit, reward, questions, answersEncrypted).send(options).then(transaction => {
       console.log('createSurvey transaction:', transaction);
       this.reloadSurveys();
     })
@@ -118,8 +119,8 @@ class AppElement extends LitElement {
                 <input type="text" class="form-control" id="newSurveyQuestions">
               </div>
               <div class="mx-2 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1" @input=${e => this.newSurveyEncrypted = e.target.checked}>
-                <label class="form-check-label" for="exampleCheck1">I want the answers to be encrypted with a public key </label>
+                <input type="checkbox" class="form-check-input" id="newSurveyAnswersEncrypted" @input=${e => this.newSurveyEncrypted = e.target.checked}>
+                <label class="form-check-label">I want the answers to be encrypted with a public key </label>
               </div>
               <div class="m-2" .hidden=${!this.newSurveyEncrypted}>
                 <label class="flex-fill mr-2">Passphrase for RSA generation</label>

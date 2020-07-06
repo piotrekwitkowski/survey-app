@@ -33,7 +33,8 @@ class SurveyElement extends LitElement {
         reward: data[3],
         questions: data[4],
         answersLength: data[5],
-        state: data[6]
+        state: data[6],
+        answersEncrypted: data[7]
       }
     })
   }
@@ -78,6 +79,7 @@ class SurveyElement extends LitElement {
           <h4>${this.instanceData.name ? this.instanceData.name : '(no title saved)'}</h4>
           <b>Address:</b> ${this.address}<br>
           <b>State:</b> ${this.stateDictionary(this.instanceData.state)},
+          <b>Encrypted:</b> ${this.instanceData.answersEncrypted},
           <b>Participants:</b> ${this.instanceData.answersLength}/${this.instanceData.totalParticipants},
           <b>Deposit:</b> ${this.instanceData.deposit} wei,
           <b>Reward:</b> ${this.instanceData.reward} wei<br>
