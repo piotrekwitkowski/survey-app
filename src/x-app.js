@@ -94,8 +94,8 @@ class AppElement extends LitElement {
         </div>
       </div>
 
-      <!-- Modal -->
-      <div class="modal fade" id="createSurveyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- Modal for survey creation -->
+      <div class="modal fade" id="createSurveyModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">

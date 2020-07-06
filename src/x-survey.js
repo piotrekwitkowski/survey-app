@@ -127,7 +127,7 @@ class SurveyElement extends LitElement {
       </div>
 
 
-      <!-- Modal participate -->
+      <!-- Modal for participation -->
       <div class="modal fade" id=${participateModalId} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -154,7 +154,7 @@ class SurveyElement extends LitElement {
         </div>
       </div>
 
-      <!-- Modal seeAnswers -->
+      <!-- Modal to see survey answers -->
       <div class="modal fade" id=${seeAnswersModalId} tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
