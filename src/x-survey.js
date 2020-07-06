@@ -1,4 +1,6 @@
 import { LitElement, html } from 'lit-element';
+const cryptico = require('cryptico-es6');
+
 class SurveyElement extends LitElement {
   createRenderRoot() { return this; }
 
@@ -45,7 +47,10 @@ class SurveyElement extends LitElement {
 
   sendAnswers() {
     console.log('sendAnswers');
-    const answers = Array.from(this.renderRoot.querySelectorAll('input')).map(input => input.value);
+    const answers = Array.from(this.renderRoot.querySelectorAll('input'))
+      .map(input => input.value)
+      .map(answer => this.instanceData.publicKey ? cryptico.encrypt(answer, this.instanceData.publicKey).cipher : answer);
+
     const options = {
       from: web3.currentProvider.selectedAddress,
       value: web3.utils.toWei("" + this.instanceData.deposit, 'wei')
@@ -79,7 +84,7 @@ class SurveyElement extends LitElement {
           <h4>${this.instanceData.name ? this.instanceData.name : '(no title saved)'}</h4>
           <b>Address:</b> ${this.address}<br>
           <b>State:</b> ${this.stateDictionary(this.instanceData.state)},
-          <b>Encryption:</b> ${this.instanceData.publicKey ? html`<a style="color:black" href='#' @click=${() => alert(this.instanceData.publicKey)}>enabled` : html`disabled`},
+          <b>Encryption:</b> ${this.instanceData.publicKey ? html`<a style="color:black" href='#' @click=${() => alert(`Public key: ${this.instanceData.publicKey}`)}>enabled` : html`disabled`},
           <b>Participants:</b> ${this.instanceData.answersLength}/${this.instanceData.totalParticipants},
           <b>Deposit:</b> ${this.instanceData.deposit} wei,
           <b>Reward:</b> ${this.instanceData.reward} wei<br>
