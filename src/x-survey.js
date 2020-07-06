@@ -9,6 +9,8 @@ class SurveyElement extends LitElement {
       address: { type: String },
       instance: { type: Object },
       instanceData: { type: Object },
+      answers: { type: Array },
+      answersDecrypted: { type: Boolean }
     }
   }
 
@@ -47,7 +49,7 @@ class SurveyElement extends LitElement {
 
   sendAnswers() {
     console.log('sendAnswers');
-    const answers = Array.from(this.renderRoot.querySelectorAll('input'))
+    const answers = Array.from(this.renderRoot.querySelectorAll('.answerInput'))
       .map(input => input.value)
       .map(answer => this.instanceData.publicKey ? cryptico.encrypt(answer, this.instanceData.publicKey).cipher : answer);
 
@@ -71,13 +73,33 @@ class SurveyElement extends LitElement {
   }
 
   seeAnswers() {
-    this.instance.methods.getAnswers().call().then(answers => {
-      console.log('seeAnswers:', answers);
-    })
+    if (!this.answers) {
+      this.instance.methods.getAnswers().call().then(answers => {
+        this.answers = this.instanceData.questions.map((question, i) => ({
+          q: question,
+          a: answers.map(participantAnswers => participantAnswers[i])
+        }))
+        // console.log('seeAnswers:', answers, this.answers);
+      })
+    }
+  }
+
+  decryptAnswers() {
+    const passphrase = this.renderRoot.querySelector('#passphrase').value;
+    const privateKey = cryptico.generateRSAKey(passphrase, 1024);
+
+    this.answers = this.answers.map(questionAndAnswers => ({
+      q: questionAndAnswers.q,
+      a: questionAndAnswers.a.map(answer => cryptico.decrypt(answer, privateKey).plaintext)
+    }
+    ));
+
+    this.answersDecrpted = true;
   }
 
   render() {
     const participateModalId = `participateModal${this.address}`;
+    const seeAnswersModalId = `seeAnswersModal${this.address}`;
     return html`
       <div style="padding-bottom:1rem">
         ${this.instanceData ? html`
@@ -99,13 +121,13 @@ class SurveyElement extends LitElement {
 
           ${this.instanceData.state < 2 ? html`
             <button type="button" class="btn btn-outline-secondary btn-sm" disabled>To see the answers the survey must be ENDED</button>` : html`
-            <button type="button" class="btn btn-outline-success btn-sm" @click=${this.seeAnswers}>See answers</button>`}
+            <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#' + seeAnswersModalId} @click=${this.seeAnswers}>See answers</button>`}
           
         `: html`Instance data not loaded yet, check console.`}
       </div>
 
 
-      <!-- Modal -->
+      <!-- Modal participate -->
       <div class="modal fade" id=${participateModalId} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -121,12 +143,44 @@ class SurveyElement extends LitElement {
               ${this.instanceData.questions.map(question => html`
                 <div class='my-2'>
                   <label class="flex-fill mr-2">${question}</label>
-                  <input class="flex-fill form-control">
+                  <input class="flex-fill form-control answerInput">
                 </div>
                 `)}
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-success" data-dismiss="modal" @click=${this.sendAnswers}>Save answers</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal seeAnswers -->
+      <div class="modal fade" id=${seeAnswersModalId} tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Answers</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+            ${this.instanceData.publicKey && !this.answersDecrpted ? html`
+              <label class="flex-fill mr-2">Passphrase to decrypt the answers:</label>
+              <input class="form-control" id='passphrase'>
+              <button type="button" class=" mt-2 btn btn-outline-success btn-sm" @click=${this.decryptAnswers}>Decrypt</button>` : ''}
+            
+            ${this.answers ? this.answers.map(answersForQuestion => html`
+                <div class='my-2'>
+                  <label class="flex-fill mr-2">${answersForQuestion.q}</label>
+                  <ol>${answersForQuestion.a.map(answer => html`<li style="overflow-wrap: break-word;">${answer}</li>`)}</ol>
+                </div>
+                `) : html`No answers for this survey yet or the answers can not be loaded!`}
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-success" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
