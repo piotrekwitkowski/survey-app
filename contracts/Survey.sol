@@ -14,6 +14,7 @@ contract Survey {
     string[] private _questions;
 
     string[][] private _answers;
+    string private _publicKey;
     address payable[] private _participants;
 
     State public state;
@@ -48,7 +49,8 @@ contract Survey {
         uint256 participants,
         uint256 deposit,
         uint256 reward,
-        string[] memory questions
+        string[] memory questions,
+        string memory publicKey
     ) public payable requireStateCreated {
         if (msg.value == participants * reward) {
             _name = name;
@@ -56,6 +58,7 @@ contract Survey {
             _deposit = deposit * 1 wei;
             _reward = reward * 1 wei;
             _questions = questions;
+            _publicKey = publicKey;
             state = State.OPEN;
         } else {
             revert(
@@ -74,7 +77,8 @@ contract Survey {
             uint256,
             string[] memory,
             uint256,
-            State
+            State,
+            string memory
         )
     {
         return (
@@ -84,7 +88,8 @@ contract Survey {
             _reward,
             _questions,
             _answers.length,
-            state
+            state,
+            _publicKey
         );
     }
 
