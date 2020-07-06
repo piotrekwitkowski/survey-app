@@ -89,12 +89,12 @@ class SurveyElement extends LitElement {
 
           <button type="button" class="btn btn-outline-primary btn-sm" @click=${this.logInstance}>Log instance</button>
           ${this.instanceData.answersLength < this.instanceData.totalParticipants ? html`
-            <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#' + participateModalId}>Participate</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>See answers</button>
-            ` : html`
-            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>All participants reached</button>
-            <button type="button" class="btn btn-outline-success btn-sm" @click=${this.seeAnswers}>See answers</button>
-          `}
+            <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target=${'#' + participateModalId}>Participate</button>` : html`
+            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>All participants reached</button>`}
+
+          ${this.instanceData.state < 2 ? html`
+            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>To see the answers the survey must be ENDED</button>` : html`
+            <button type="button" class="btn btn-outline-success btn-sm" @click=${this.seeAnswers}>See answers</button>`}
           
         `: html`Instance data not loaded yet, check console.`}
       </div>
