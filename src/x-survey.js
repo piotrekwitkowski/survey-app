@@ -43,8 +43,8 @@ class SurveyElement extends LitElement {
     console.log('instance:', this.instance, this.instanceData);
   }
 
-  sendAnswer() {
-    console.log('sendAnswer');
+  sendAnswers() {
+    console.log('sendAnswers');
     const answers = Array.from(this.renderRoot.querySelectorAll('input')).map(input => input.value);
     const options = {
       from: web3.currentProvider.selectedAddress,
@@ -53,7 +53,7 @@ class SurveyElement extends LitElement {
 
     console.log('answers:', answers, 'options:', options);
     this.instance.methods.participate(answers).send(options).then(transaction => {
-      console.log('sendAnswer transaction:', transaction);
+      console.log('sendAnswers transaction:', transaction);
       this.loadInstanceData();
     })
   }
@@ -121,7 +121,7 @@ class SurveyElement extends LitElement {
                 `)}
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-success" data-dismiss="modal" @click=${this.sendAnswer}>Save answers</button>
+              <button type="button" class="btn btn-outline-success" data-dismiss="modal" @click=${this.sendAnswers}>Save answers</button>
             </div>
           </div>
         </div>
